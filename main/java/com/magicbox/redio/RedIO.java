@@ -13,10 +13,10 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 public class RedIO
 {
 	@Instance(value = Constants.MOD_ID)
-	public static RedIO			instance;
+	public static RedIO instance;
 
 	@SidedProxy(clientSide = Constants.CLIENT_PROXY, serverSide = Constants.SERVER_PROXY)
-	public static CommonProxy	proxy;
+	public static CommonProxy proxy;
 
 	@EventHandler
 	public void load(FMLInitializationEvent event)
