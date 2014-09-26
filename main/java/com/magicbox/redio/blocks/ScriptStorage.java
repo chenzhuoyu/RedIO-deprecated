@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 
 import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.common.Instances;
 
 public class ScriptStorage extends BaseBlock
 {
@@ -30,7 +30,7 @@ public class ScriptStorage extends BaseBlock
 		setHardness(3.0f);
 		setStepSound(Block.soundTypeStone);
 		setBlockName(Constants.ScriptStorage.BLOCK_NAME);
-		setCreativeTab(CreativeTabs.tabMisc);
+		setCreativeTab(Instances.creativeTab);
 		setHarvestLevel("pickaxe", 1);
 		setBlockTextureName(Constants.ScriptStorage.TEXTURE_NAME);
 

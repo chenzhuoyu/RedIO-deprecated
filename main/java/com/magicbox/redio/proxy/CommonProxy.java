@@ -12,7 +12,7 @@ public class CommonProxy
 {
 	public void registerRenderers()
 	{
-		for (Field field : Instances.class.getFields())
+		for (Field field : Instances.Blocks.class.getFields())
 		{
 			try
 			{
