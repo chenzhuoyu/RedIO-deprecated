@@ -12,5 +12,6 @@ public class Instances
 	public interface Blocks
 	{
 		public static final ScriptStorage	scriptStorage	= new ScriptStorage(Material.rock);
+		public static final BUS	bus	= new BUS(Material.rock);
 	}
 }

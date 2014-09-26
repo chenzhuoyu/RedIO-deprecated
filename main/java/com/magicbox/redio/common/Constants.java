@@ -16,4 +16,10 @@ public class Constants
 		public static final String	BLOCK_NAME		= "scriptStorage";
 		public static final String	TEXTURE_NAME	= MOD_ID + ":" + BLOCK_NAME;
 	}
+	
+	public interface BUS
+	{
+		public static final String	BLOCK_NAME		= "bus";
+		public static final String	TEXTURE_NAME	= MOD_ID + ":" + BLOCK_NAME;
+	}
 }
