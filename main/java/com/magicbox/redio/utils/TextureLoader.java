@@ -32,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class TextureLoader extends TextureAtlasSprite
 {
-	private int subIndex;
+	private int iconIndex;
 	private int mipmapLevels;
 
 	private BufferedImage comparisonImage;
@@ -42,10 +42,10 @@ public class TextureLoader extends TextureAtlasSprite
 	private static Map<String, CacheEntry> cachedImages = new HashMap();
 	private static Map<Integer, List<TextureLoader>> existingTextures = new HashMap();
 
-	private TextureLoader(String name, int index)
+	private TextureLoader(String name, int iconIndex)
 	{
 		super(name);
-		subIndex = index;
+		this.iconIndex = iconIndex;
 	}
 
 	public static IIcon registerTexture(IIconRegister register, String textureName, int index)
@@ -164,7 +164,7 @@ public class TextureLoader extends TextureAtlasSprite
 
 		int size = bufferedImage.getHeight() / animationLength;
 		int count = bufferedImage.getWidth() / size;
-		int index = subIndex;
+		int index = iconIndex;
 
 		if (count == 1 || count == 6 || count == 12)
 			index %= count;
