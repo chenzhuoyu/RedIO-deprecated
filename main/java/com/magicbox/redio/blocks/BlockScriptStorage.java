@@ -6,11 +6,13 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Instances;
 
-public class ScriptStorage extends BaseBlock
+public class BlockScriptStorage extends BlockBase
 {
 	private File folder = new File(Constants.ScriptStorage.SCRIPT_FOLDER);
 	private ArrayList<String> scripts = new ArrayList<String>();
@@ -24,7 +26,7 @@ public class ScriptStorage extends BaseBlock
 		}
 	}
 
-	public ScriptStorage(Material material)
+	public BlockScriptStorage(Material material)
 	{
 		super(material);
 		setHardness(3.0f);
@@ -32,12 +34,18 @@ public class ScriptStorage extends BaseBlock
 		setBlockName(Constants.ScriptStorage.BLOCK_NAME);
 		setCreativeTab(Instances.creativeTab);
 		setHarvestLevel("pickaxe", 1);
-		setBlockTextureName(Constants.ScriptStorage.TEXTURE_NAME);
+		setBlockTextureName(Constants.getTextureName(Constants.ScriptStorage.BLOCK_NAME));
 
 		if (!folder.exists())
 			folder.mkdirs();
 
 		for (File file : folder.listFiles(new ScriptFilter()))
 			System.out.println(file.getName());
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta)
+	{
+		return null;
 	}
 }

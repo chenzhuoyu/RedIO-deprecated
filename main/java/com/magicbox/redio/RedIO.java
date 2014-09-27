@@ -1,7 +1,7 @@
 package com.magicbox.redio;
 
 import com.magicbox.redio.common.Constants;
-import com.magicbox.redio.proxy.CommonProxy;
+import com.magicbox.redio.proxies.CommonProxy;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -21,6 +21,7 @@ public class RedIO
 	@EventHandler
 	public void load(FMLInitializationEvent event)
 	{
-		proxy.registerRenderers();
+		proxy.registerBlocks();
+		proxy.registerEntities();
 	}
 }

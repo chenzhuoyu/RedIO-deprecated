@@ -1,4 +1,4 @@
-package com.magicbox.redio.proxy;
+package com.magicbox.redio.proxies;
 
 import java.lang.reflect.Field;
 
@@ -10,7 +10,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy
 {
-	public void registerRenderers()
+	public void registerBlocks()
 	{
 		for (Field field : Instances.Blocks.class.getFields())
 		{
@@ -18,6 +18,24 @@ public class CommonProxy
 			{
 				Block block = (Block)field.get(field.getClass());
 				GameRegistry.registerBlock(block, block.getUnlocalizedName());
+			} catch (IllegalAccessException e)
+			{
+				e.printStackTrace();
+			} catch (IllegalArgumentException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void registerEntities()
+	{
+		for (Field field : Instances.Entities.class.getFields())
+		{
+			try
+			{
+				Class entity = (Class)field.get(field.getClass());
+				GameRegistry.registerTileEntity(entity, entity.getName());
 			} catch (IllegalAccessException e)
 			{
 				e.printStackTrace();
