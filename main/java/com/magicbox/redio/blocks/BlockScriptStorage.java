@@ -44,6 +44,12 @@ public class BlockScriptStorage extends BlockBase
 	}
 
 	@Override
+	public int getTextureCount()
+	{
+		return 6;
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta)
 	{
 		return null;
