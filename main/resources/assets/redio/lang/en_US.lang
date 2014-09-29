@@ -2,3 +2,4 @@ itemGroup.RedIO=RedIO
 
 tile.processor.name=Processor
 tile.scriptStorage.name=Script Storage
+tile.busCable.name=BUS Cable

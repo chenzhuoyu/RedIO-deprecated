@@ -14,8 +14,8 @@ import com.magicbox.redio.common.Instances;
 
 public class BlockScriptStorage extends BlockBase
 {
-	private File folder = new File(Constants.ScriptStorage.SCRIPT_FOLDER);
-	private ArrayList<String> scripts = new ArrayList<String>();
+	private final File folder = new File(Constants.ScriptStorage.SCRIPT_FOLDER);
+	private final ArrayList<String> scripts = new ArrayList<String>();
 
 	private class ScriptFilter implements FilenameFilter
 	{
