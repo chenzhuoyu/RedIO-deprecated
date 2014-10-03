@@ -8,6 +8,11 @@ public class Constants
 	public static final String CLIENT_PROXY = "com.magicbox.redio.proxies.ClientProxy";
 	public static final String SERVER_PROXY = "com.magicbox.redio.proxies.CommonProxy";
 
+	public interface BusCable
+	{
+		public static final String BLOCK_NAME = "busCable";
+	}
+	
 	public interface Processor
 	{
 		public static final String BLOCK_NAME = "processor";
