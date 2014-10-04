@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.utils.TextureLoader;
@@ -38,7 +42,7 @@ public abstract class BlockBase extends BlockContainer
 	public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side)
 	{
 		TileEntity entity = access.getTileEntity(x, y, z);
-		return textures.get(entity instanceof EntityBase ? ((EntityBase) entity).getTextureIndex(side) : side);
+		return textures.get(entity instanceof EntityBase ? ((EntityBase)entity).getTextureIndex(side) : side);
 	}
 
 	@Override
@@ -52,8 +56,17 @@ public abstract class BlockBase extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public void onRender(IBlockAccess blockAccess, int x, int y, int z)
 	{
-		TileEntity te = blockAccess.getTileEntity(x, y, z);
+		TileEntity tileEntity = blockAccess.getTileEntity(x, y, z);
 
-		if ((te instanceof EntityBase)) ((EntityBase) te).onRender();
+		if (tileEntity instanceof EntityBase)
+			((EntityBase)tileEntity).onRender();
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, int x, int z, int y, EntityLivingBase entity, ItemStack itemStack)
+	{
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		if (tileEntity instanceof EntityBase)
+			((EntityBase)tileEntity).setFacing(MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5d) & 3);
 	}
 }
