@@ -1,5 +1,6 @@
 package com.magicbox.redio.entities;
 
+
 public class EntityBusCable extends EntityBase
 {
 	@Override
