@@ -34,7 +34,8 @@ public abstract class EntityBase extends TileEntity
 
 	public int getTextureIndex(int side)
 	{
-		return side;
+		int index[][] = { { 4, 3, 2, 1, 0, 5 }, { 2, 4, 5, 1, 0, 3 }, { 5, 2, 3, 1, 0, 4 }, { 3, 5, 4, 1, 0, 2 } };
+		return index[facing][side];
 	}
 
 	@SideOnly(Side.CLIENT)

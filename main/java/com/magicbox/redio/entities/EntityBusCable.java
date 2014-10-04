@@ -1,11 +1,14 @@
 package com.magicbox.redio.entities;
 
+import java.util.Random;
+
 public class EntityBusCable extends EntityBase
 {
-	public EntityBusCable(int facing)
+	private static final Random random = new Random();
+
+	public EntityBusCable()
 	{
 		super();
-		setFacing(facing);
 	}
 
 	@Override

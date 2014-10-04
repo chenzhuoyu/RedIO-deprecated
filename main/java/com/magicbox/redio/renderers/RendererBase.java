@@ -1,8 +1,12 @@
 package com.magicbox.redio.renderers;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
@@ -12,7 +16,7 @@ import com.magicbox.redio.blocks.BlockBase;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
-public class RendererBase implements ISimpleBlockRenderingHandler
+public abstract class RendererBase implements ISimpleBlockRenderingHandler
 {
 	private final int renderId;
 	public static boolean fromTesr = false;
@@ -83,6 +87,12 @@ public class RendererBase implements ISimpleBlockRenderingHandler
 	public int getRenderId()
 	{
 		return renderId;
+	}
+
+	public static IIcon getMissingIcon(ResourceLocation textureSheet)
+	{
+		return ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(textureSheet))
+				.getAtlasSprite("missingno");
 	}
 
 }
