@@ -31,7 +31,7 @@ public abstract class BlockBase extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta)
 	{
-		return textures.get(meta);
+		return textures.get(side);
 	}
 
 	@Override
