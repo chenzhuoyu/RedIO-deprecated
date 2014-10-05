@@ -16,14 +16,9 @@ public class CommonProxy
 		{
 			try
 			{
-				Block block = (Block) field.get(field.getClass());
+				Block block = (Block)field.get(field.getClass());
 				GameRegistry.registerBlock(block, block.getUnlocalizedName());
-			}
-			catch (IllegalAccessException e)
-			{
-				e.printStackTrace();
-			}
-			catch (IllegalArgumentException e)
+			} catch (IllegalAccessException | IllegalArgumentException e)
 			{
 				e.printStackTrace();
 			}
@@ -36,14 +31,9 @@ public class CommonProxy
 		{
 			try
 			{
-				Class entity = (Class) field.get(field.getClass());
+				Class entity = (Class)field.get(field.getClass());
 				GameRegistry.registerTileEntity(entity, entity.getName());
-			}
-			catch (IllegalAccessException e)
-			{
-				e.printStackTrace();
-			}
-			catch (IllegalArgumentException e)
+			} catch (IllegalAccessException | IllegalArgumentException e)
 			{
 				e.printStackTrace();
 			}
