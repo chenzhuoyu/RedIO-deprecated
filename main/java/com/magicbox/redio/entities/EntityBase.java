@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public abstract class EntityBase extends TileEntity
 {
 	private int facing = 0;
-	private IIcon [] lastRenderIcons;
+	private IIcon[] lastRenderIcons;
 
 	@SideOnly(Side.CLIENT)
 	private int tesrMask;
@@ -41,8 +41,7 @@ public abstract class EntityBase extends TileEntity
 	{
 		Block block = getBlockType();
 
-		if (lastRenderIcons == null)
-			lastRenderIcons = new IIcon [6];
+		if (lastRenderIcons == null) lastRenderIcons = new IIcon[6];
 
 		for (int side = 0; side < 6; side++)
 			lastRenderIcons[side] = block.getIcon(worldObj, xCoord, yCoord, zCoord, side);
