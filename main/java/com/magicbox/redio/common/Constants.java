@@ -4,15 +4,21 @@ public class Constants
 {
 	public static final String MOD_ID = "redio";
 	public static final String MOD_VERSION = "v0.1a";
+	public static final String CHANNEL_NAME = "RedIO";
 
 	public static final String CLIENT_PROXY = "com.magicbox.redio.proxies.ClientProxy";
 	public static final String SERVER_PROXY = "com.magicbox.redio.proxies.CommonProxy";
+
+	public interface Commands
+	{
+		public static final int SET_FACING = 0;
+	}
 
 	public interface BusCable
 	{
 		public static final String BLOCK_NAME = "busCable";
 	}
-	
+
 	public interface Processor
 	{
 		public static final String BLOCK_NAME = "processor";
