@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import com.magicbox.redio.CreativeTab;
 import com.magicbox.redio.blocks.BlockProcessor;
 import com.magicbox.redio.entities.EntityProcessor;
+import com.magicbox.redio.renderers.RendererGlobal;
 
 public class Instances
 {
@@ -22,5 +23,6 @@ public class Instances
 
 	public interface Renderers
 	{
+		public static final RendererGlobal rendererGlobal = new RendererGlobal();
 	}
 }
