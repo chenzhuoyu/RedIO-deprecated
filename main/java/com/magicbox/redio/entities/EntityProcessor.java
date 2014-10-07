@@ -21,12 +21,12 @@ import com.magicbox.redio.script.objects.console.RedConsoleObject;
 
 public class EntityProcessor extends EntityBase
 {
-	private double heatValue = 0.0d;
+	private final double heatValue = 0.0d;
 	private boolean isPowered = false;
 
-	private Random random = new Random();
-	private Interpreter interpreter = new Interpreter();
-	private ExecutorService threadPool = Executors.newSingleThreadExecutor();
+	private final Random random = new Random();
+	private final Interpreter interpreter = new Interpreter();
+	private final ExecutorService threadPool = Executors.newSingleThreadExecutor();
 
 	public EntityProcessor()
 	{
@@ -36,7 +36,8 @@ public class EntityProcessor extends EntityBase
 			interpreter.addBuiltins("Console", new RedConsoleObject());
 			interpreter.setBytecodes(Compiler.compile("<string>", "func onPowerChanged(powered) {}"));
 			interpreter.run();
-		} catch (ScriptException e)
+		}
+		catch (ScriptException e)
 		{
 			e.printStackTrace();
 		}
@@ -56,7 +57,8 @@ public class EntityProcessor extends EntityBase
 					try
 					{
 						callable.invoke(RedBoolObject.fromBoolean(isPowered));
-					} catch (Exception e)
+					}
+					catch (Exception e)
 					{
 						e.printStackTrace();
 					}
@@ -88,10 +90,11 @@ public class EntityProcessor extends EntityBase
 		setPowered(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 
 		if (isPowered)
-			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 3.0f, true);
+		// worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord +
+		// 0.5d, 3.0f, true);
 
-		// worldObj.spawnParticle("largesmoke", xCoord + random.nextDouble(),
-		// yCoord, zCoord + random.nextDouble(), 0.0d, 0.05d, 0.0d);
+		worldObj.spawnParticle("largesmoke", xCoord + random.nextDouble(), yCoord, zCoord + random.nextDouble(), 0.0d,
+				0.05d, 0.0d);
 	}
 
 	@Override
@@ -109,6 +112,6 @@ public class EntityProcessor extends EntityBase
 	@Override
 	public void handleUpdatePacket(PacketEntityUpdate packet)
 	{
-		setPowered(((PacketEntityProcessorUpdate)packet).getPowered());
+		setPowered(((PacketEntityProcessorUpdate) packet).getPowered());
 	}
 }
