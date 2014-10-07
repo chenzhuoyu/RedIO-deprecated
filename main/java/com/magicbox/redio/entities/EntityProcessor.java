@@ -24,9 +24,9 @@ public class EntityProcessor extends EntityBase
 	private double heatValue = 0.0d;
 	private boolean isPowered = false;
 
-	private Random random = new Random();
-	private Interpreter interpreter = new Interpreter();
-	private ExecutorService threadPool = Executors.newSingleThreadExecutor();
+	private final Random random = new Random();
+	private final Interpreter interpreter = new Interpreter();
+	private final ExecutorService threadPool = Executors.newSingleThreadExecutor();
 
 	public EntityProcessor()
 	{
@@ -36,7 +36,8 @@ public class EntityProcessor extends EntityBase
 			interpreter.addBuiltins("Console", new RedConsoleObject());
 			interpreter.setBytecodes(Compiler.compile("<string>", "func onPowerChanged(powered) {}"));
 			interpreter.run();
-		} catch (ScriptException e)
+		}
+		catch (ScriptException e)
 		{
 			e.printStackTrace();
 		}
@@ -56,7 +57,8 @@ public class EntityProcessor extends EntityBase
 					try
 					{
 						callable.invoke(RedBoolObject.fromBoolean(isPowered));
-					} catch (Exception e)
+					}
+					catch (Exception e)
 					{
 						e.printStackTrace();
 					}
@@ -113,6 +115,6 @@ public class EntityProcessor extends EntityBase
 	@Override
 	public void handleUpdatePacket(PacketEntityUpdate packet)
 	{
-		setPowered(((PacketEntityProcessorUpdate)packet).getPowered());
+		setPowered(((PacketEntityProcessorUpdate) packet).getPowered());
 	}
 }
