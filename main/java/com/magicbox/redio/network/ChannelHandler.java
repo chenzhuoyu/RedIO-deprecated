@@ -8,7 +8,7 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<PacketBase>
 {
 	public ChannelHandler()
 	{
-		addDiscriminator(0, PacketEntityUpdate.class);
+		addDiscriminator(0, PacketEntityProcessorUpdate.class);
 	}
 
 	@Override

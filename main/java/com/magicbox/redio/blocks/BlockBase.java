@@ -9,7 +9,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
@@ -39,6 +41,20 @@ public abstract class BlockBase extends BlockContainer
 	public IIcon getIcon(int side, int meta)
 	{
 		return textures.get(Constants.FACING_SIDE[meta][side]);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
+	{
+		int meta = world.getBlockMetadata(x, y, z);
+		TileEntity entity = world.getTileEntity(x, y, z);
+
+		if (!(entity instanceof EntityBase))
+			return getIcon(side, meta);
+
+		int index = ((EntityBase)entity).getTextureIndex(side, meta);
+		return index == -1 ? getIcon(side, meta) : textures.get(index);
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.network.PacketEntityUpdate;
-import com.magicbox.redio.network.PacketUpdate;
 
 public abstract class EntityBase extends TileEntity
 {
@@ -19,14 +18,19 @@ public abstract class EntityBase extends TileEntity
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, facing, 3);
 	}
 
+	public int getTextureIndex(int side, int meta)
+	{
+		return -1;
+	}
+
 	@Override
 	public Packet getDescriptionPacket()
 	{
 		return Utils.toPacket(new PacketEntityUpdate(this), 0);
 	}
 
-	public void handleUpdatePacket(PacketUpdate packet)
+	public void handleUpdatePacket(PacketEntityUpdate packet)
 	{
-		;
+		// Empty stub
 	}
 }

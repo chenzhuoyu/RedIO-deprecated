@@ -110,7 +110,6 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
 		int f = block.colorMultiplier(world, x, y, z);
-		int metadata = world.getBlockMetadata(x, y, z);
 		int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 
 		float b = (f >> 0 & 0xFF) / 255.0f;
@@ -128,27 +127,27 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r, g, b);
-		renderFace(renderer, block, x, y, z, 0, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
+		renderFace(renderer, block, x, y, z, 0, renderer.getBlockIcon(block, world, x, y, z, 0));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.5f, g * 0.5f, b * 0.5f);
-		renderFace(renderer, block, x, y, z, 1, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
+		renderFace(renderer, block, x, y, z, 1, renderer.getBlockIcon(block, world, x, y, z, 1));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.6f, g * 0.6f, b * 0.6f);
-		renderFace(renderer, block, x, y, z, 2, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
+		renderFace(renderer, block, x, y, z, 2, renderer.getBlockIcon(block, world, x, y, z, 2));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.6f, g * 0.6f, b * 0.6f);
-		renderFace(renderer, block, x, y, z, 3, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
+		renderFace(renderer, block, x, y, z, 3, renderer.getBlockIcon(block, world, x, y, z, 3));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.8f, g * 0.8f, b * 0.8f);
-		renderFace(renderer, block, x, y, z, 4, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
+		renderFace(renderer, block, x, y, z, 4, renderer.getBlockIcon(block, world, x, y, z, 4));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.8f, g * 0.8f, b * 0.8f);
-		renderFace(renderer, block, x, y, z, 5, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
+		renderFace(renderer, block, x, y, z, 5, renderer.getBlockIcon(block, world, x, y, z, 5));
 
 		return false;
 	}

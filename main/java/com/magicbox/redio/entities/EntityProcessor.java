@@ -6,7 +6,13 @@ import java.util.concurrent.Executors;
 import javax.script.ScriptException;
 
 import net.minecraft.block.Block;
+import net.minecraft.network.Packet;
 
+import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.common.Utils;
+import com.magicbox.redio.network.Network;
+import com.magicbox.redio.network.PacketEntityProcessorUpdate;
+import com.magicbox.redio.network.PacketEntityUpdate;
 import com.magicbox.redio.script.compiler.Compiler;
 import com.magicbox.redio.script.engine.Interpreter;
 import com.magicbox.redio.script.objects.RedBoolObject;
@@ -25,7 +31,7 @@ public class EntityProcessor extends EntityBase
 		{
 			interpreter.reset();
 			interpreter.addBuiltins("Console", new RedConsoleObject());
-			interpreter.setBytecodes(Compiler.compile("<string>", "func onPowerChanged(powered) { Console.println(powered); }"));
+			interpreter.setBytecodes(Compiler.compile("<string>", "func onPowerChanged(powered) {}"));
 			interpreter.run();
 		} catch (ScriptException e)
 		{
@@ -56,17 +62,42 @@ public class EntityProcessor extends EntityBase
 		}
 	}
 
+	public boolean getPowered()
+	{
+		return isPowered;
+	}
+
 	public void setPowered(boolean powered)
 	{
 		if (powered != isPowered)
 		{
 			isPowered = powered;
 			invokePowerChanged();
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			Network.broadcastToClients(new PacketEntityProcessorUpdate(this));
 		}
+	}
+
+	@Override
+	public int getTextureIndex(int side, int meta)
+	{
+		return Constants.FACING_SIDE[meta][side] + (isPowered ? 0 : 6);
+	}
+
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		return Utils.toPacket(new PacketEntityProcessorUpdate(this), 0);
 	}
 
 	public void onNeighborBlockChanged(Block block)
 	{
 		setPowered(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
+	}
+
+	@Override
+	public void handleUpdatePacket(PacketEntityUpdate packet)
+	{
+		setPowered(((PacketEntityProcessorUpdate)packet).getPowered());
 	}
 }

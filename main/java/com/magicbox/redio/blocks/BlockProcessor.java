@@ -24,7 +24,7 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public int getTextureCount()
 	{
-		return 6;
+		return 12;
 	}
 
 	@Override
