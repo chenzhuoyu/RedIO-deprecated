@@ -3,6 +3,7 @@ package com.magicbox.redio.blocks;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -36,7 +37,8 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
 	{
-		return true;
+		TileEntity entity = world.getTileEntity(x, y, z);
+		return entity == null ? false : entity.getWorldObj().isBlockIndirectlyGettingPowered(x, y, z);
 	}
 
 	@Override
