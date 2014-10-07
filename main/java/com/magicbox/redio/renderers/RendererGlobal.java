@@ -161,7 +161,7 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
 
-		GL11.glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+		GL11.glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
 		GL11.glTranslatef(-0.5f, -0.5f, -0.5f);
 
 		tessellator.startDrawingQuads();
