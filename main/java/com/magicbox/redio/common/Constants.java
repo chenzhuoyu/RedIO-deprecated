@@ -1,5 +1,6 @@
 package com.magicbox.redio.common;
 
+/* @formatter:off */
 public class Constants
 {
 	public static final String MOD_ID = "redio";
@@ -9,10 +10,13 @@ public class Constants
 	public static final String CLIENT_PROXY = "com.magicbox.redio.proxies.ClientProxy";
 	public static final String SERVER_PROXY = "com.magicbox.redio.proxies.CommonProxy";
 
-	public interface Commands
+	public static final int [][] FACING_SIDE = new int [] []
 	{
-		public static final int SET_FACING = 0;
-	}
+		{ 0, 1, 2, 3, 4, 5 },
+		{ 0, 1, 4, 5, 3, 2 },
+		{ 0, 1, 3, 2, 5, 4 },
+		{ 0, 1, 5, 4, 2, 3 },
+	};
 
 	public interface BusCable
 	{

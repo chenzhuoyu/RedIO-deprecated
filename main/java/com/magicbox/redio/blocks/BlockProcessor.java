@@ -1,11 +1,9 @@
 package com.magicbox.redio.blocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
-import com.magicbox.redio.common.Instances;
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.entities.EntityProcessor;
 
@@ -15,10 +13,8 @@ public class BlockProcessor extends BlockBase
 	{
 		super(material);
 		setHardness(3.0f);
-		setStepSound(Block.soundTypeStone);
-		setBlockName(Constants.Processor.BLOCK_NAME);
-		setCreativeTab(Instances.creativeTab);
 		setHarvestLevel("pickaxe", 1);
+		setBlockName(Constants.Processor.BLOCK_NAME);
 		setBlockTextureName(Constants.getTextureName(Constants.Processor.BLOCK_NAME));
 	}
 

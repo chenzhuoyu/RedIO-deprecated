@@ -2,15 +2,16 @@ package com.magicbox.redio.script.engine;
 
 import java.io.Serializable;
 
+/* @formatter:off */
 public class Bytecode implements Serializable
 {
 	private static final long serialVersionUID = 20141003L;
-	
+
 	public int opcode = 0;
 	public int intAccum = 0;
 	public String stringAccum = "";
 	public Constant constAccum = new Constant();
-	
+
 	public Bytecode(int opcode)
 	{
 		this.opcode = opcode;
