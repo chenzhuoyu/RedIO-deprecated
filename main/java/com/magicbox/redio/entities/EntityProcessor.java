@@ -1,11 +1,11 @@
 package com.magicbox.redio.entities;
 
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.script.ScriptException;
 
-import net.minecraft.block.Block;
 import net.minecraft.network.Packet;
 
 import com.magicbox.redio.common.Constants;
@@ -21,7 +21,10 @@ import com.magicbox.redio.script.objects.console.RedConsoleObject;
 
 public class EntityProcessor extends EntityBase
 {
+	private double heatValue = 0.0d;
 	private boolean isPowered = false;
+
+	private Random random = new Random();
 	private Interpreter interpreter = new Interpreter();
 	private ExecutorService threadPool = Executors.newSingleThreadExecutor();
 
@@ -79,6 +82,19 @@ public class EntityProcessor extends EntityBase
 	}
 
 	@Override
+	public void updateEntity()
+	{
+		super.updateEntity();
+		setPowered(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
+
+		if (isPowered)
+			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 3.0f, true);
+
+		// worldObj.spawnParticle("largesmoke", xCoord + random.nextDouble(),
+		// yCoord, zCoord + random.nextDouble(), 0.0d, 0.05d, 0.0d);
+	}
+
+	@Override
 	public int getTextureIndex(int side, int meta)
 	{
 		return Constants.FACING_SIDE[meta][side] + (isPowered ? 0 : 6);
@@ -88,11 +104,6 @@ public class EntityProcessor extends EntityBase
 	public Packet getDescriptionPacket()
 	{
 		return Utils.toPacket(new PacketEntityProcessorUpdate(this), 0);
-	}
-
-	public void onNeighborBlockChanged(Block block)
-	{
-		setPowered(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 	}
 
 	@Override

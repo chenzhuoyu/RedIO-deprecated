@@ -1,8 +1,8 @@
 package com.magicbox.redio.blocks;
 
-import net.minecraft.block.Block;
+import java.util.Random;
+
 import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -28,6 +28,12 @@ public class BlockProcessor extends BlockBase
 	}
 
 	@Override
+	public int quantityDropped(Random random)
+	{
+		return 0;
+	}
+
+	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
 	{
 		return true;
@@ -37,13 +43,5 @@ public class BlockProcessor extends BlockBase
 	public EntityBase createNewTileEntity(World world, int meta)
 	{
 		return new EntityProcessor();
-	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
-	{
-		TileEntity entity = world.getTileEntity(x, y, z);
-		if (entity instanceof EntityProcessor)
-			((EntityProcessor)entity).onNeighborBlockChanged(block);
 	}
 }
