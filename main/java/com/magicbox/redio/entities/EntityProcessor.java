@@ -21,7 +21,7 @@ import com.magicbox.redio.script.objects.console.RedConsoleObject;
 
 public class EntityProcessor extends EntityBase
 {
-	private final double heatValue = 0.0d;
+	private double heatValue = 0.0d;
 	private boolean isPowered = false;
 
 	private final Random random = new Random();
@@ -90,11 +90,14 @@ public class EntityProcessor extends EntityBase
 		setPowered(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 
 		if (isPowered)
-		// worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord +
-		// 0.5d, 3.0f, true);
+			heatValue += 1.0d;
+		else
+			heatValue -= 0.1d;
 
-		worldObj.spawnParticle("largesmoke", xCoord + random.nextDouble(), yCoord, zCoord + random.nextDouble(), 0.0d,
-				0.05d, 0.0d);
+		if (heatValue >= 100.0d)
+			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
+		else if (heatValue >= 60.0d)
+			worldObj.spawnParticle("largesmoke", xCoord + random.nextDouble(), yCoord, zCoord + random.nextDouble(), 0.0d, 0.05d, 0.0d);
 	}
 
 	@Override
