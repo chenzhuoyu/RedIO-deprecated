@@ -90,7 +90,7 @@ public class EntityProcessor extends EntityBase
 		if (isPowered)
 			heatValue += 1.0d;
 		else
-			heatValue -= 0.1d;
+			heatValue -= 0.5d;
 
 		if (heatValue >= 100.0d)
 			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
