@@ -32,7 +32,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class TextureLoader extends TextureAtlasSprite
 {
-	private int iconIndex;
+	private final int iconIndex;
 	private int mipmapLevels;
 
 	private BufferedImage comparisonImage;
@@ -53,7 +53,7 @@ public class TextureLoader extends TextureAtlasSprite
 		String name = textureName + ":" + index;
 		TextureAtlasSprite result = new TextureLoader(name, index);
 
-		((TextureMap)register).setTextureEntry(name, result);
+		((TextureMap) register).setTextureEntry(name, result);
 		return result;
 	}
 
@@ -91,13 +91,15 @@ public class TextureLoader extends TextureAtlasSprite
 		{
 			mipmapLevel = TextureMap.class.getDeclaredField("field_147636_j");
 			anisotropicFiltering = TextureMap.class.getDeclaredField("field_147637_k");
-		} catch (NoSuchFieldException e)
+		}
+		catch (NoSuchFieldException e)
 		{
 			try
 			{
 				mipmapLevel = TextureMap.class.getDeclaredField("mipmapLevels");
 				anisotropicFiltering = TextureMap.class.getDeclaredField("anisotropicFiltering");
-			} catch (NoSuchFieldException f)
+			}
+			catch (NoSuchFieldException f)
 			{
 				throw new RuntimeException(f);
 			}
@@ -108,7 +110,8 @@ public class TextureLoader extends TextureAtlasSprite
 		try
 		{
 			mipmapLevels = mipmapLevel.getInt(Minecraft.getMinecraft().getTextureMapBlocks());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -116,7 +119,8 @@ public class TextureLoader extends TextureAtlasSprite
 		try
 		{
 			return loadSubImage(manager.getResource(location));
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -137,7 +141,7 @@ public class TextureLoader extends TextureAtlasSprite
 		else
 		{
 			bufferedImage = ImageIO.read(res.getInputStream());
-			animationMeta = (AnimationMetadataSection)res.getMetadata("animation");
+			animationMeta = (AnimationMetadataSection) res.getMetadata("animation");
 
 			cachedImages.put(name, new CacheEntry(bufferedImage, animationMeta));
 		}
@@ -152,7 +156,8 @@ public class TextureLoader extends TextureAtlasSprite
 				Field parentAnimationMeta = TextureAtlasSprite.class.getDeclaredField("field_110982_k");
 				parentAnimationMeta.setAccessible(true);
 				parentAnimationMeta.set(this, animationMeta);
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				throw new RuntimeException(e);
 			}
@@ -166,7 +171,7 @@ public class TextureLoader extends TextureAtlasSprite
 		int count = bufferedImage.getWidth() / size;
 		int index = iconIndex;
 
-		if (count == 1 || count == 6 || count == 12)
+		if (count == 1 || count == 6 || count == 12 || count == 24)
 			index %= count;
 		else if (count == 2)
 			index /= 6;
@@ -189,7 +194,7 @@ public class TextureLoader extends TextureAtlasSprite
 		assert animationLength > 0;
 
 		int totalHeight = height * animationLength;
-		int [] rgbaData = new int [width * totalHeight];
+		int[] rgbaData = new int[width * totalHeight];
 
 		comparisonImage = image.getSubimage(index * width, 0, width, totalHeight);
 		comparisonImage.getRGB(0, 0, width, totalHeight, rgbaData, 0, width);
@@ -200,7 +205,7 @@ public class TextureLoader extends TextureAtlasSprite
 
 		if (matchingTextures != null)
 		{
-			int [] rgbaData2 = new int [width * totalHeight];
+			int[] rgbaData2 = new int[width * totalHeight];
 
 			for (TextureLoader matchingTexture : matchingTextures)
 			{
@@ -232,17 +237,19 @@ public class TextureLoader extends TextureAtlasSprite
 
 		try
 		{
-			fixTransparentPixels = TextureAtlasSprite.class.getDeclaredMethod("func_147961_a", int [][].class);
-			prepareAnisotropicFiltering =
-				TextureAtlasSprite.class.getDeclaredMethod("func_147960_a", int [][].class, Integer.TYPE, Integer.TYPE);
-		} catch (NoSuchMethodException e)
+			fixTransparentPixels = TextureAtlasSprite.class.getDeclaredMethod("func_147961_a", int[][].class);
+			prepareAnisotropicFiltering = TextureAtlasSprite.class.getDeclaredMethod("func_147960_a", int[][].class, Integer.TYPE,
+					Integer.TYPE);
+		}
+		catch (NoSuchMethodException e)
 		{
 			try
 			{
-				fixTransparentPixels = TextureAtlasSprite.class.getDeclaredMethod("fixTransparentPixels", int [][].class);
-				prepareAnisotropicFiltering =
-					TextureAtlasSprite.class.getDeclaredMethod("prepareAnisotropicFiltering", int [][].class, Integer.TYPE, Integer.TYPE);
-			} catch (NoSuchMethodException f)
+				fixTransparentPixels = TextureAtlasSprite.class.getDeclaredMethod("fixTransparentPixels", int[][].class);
+				prepareAnisotropicFiltering = TextureAtlasSprite.class.getDeclaredMethod("prepareAnisotropicFiltering", int[][].class,
+						Integer.TYPE, Integer.TYPE);
+			}
+			catch (NoSuchMethodException f)
 			{
 				throw new RuntimeException(f);
 			}
@@ -254,7 +261,7 @@ public class TextureLoader extends TextureAtlasSprite
 		if (animationMeta != null && animationMeta.getFrameCount() > 0)
 			for (Iterator it = animationMeta.getFrameIndexSet().iterator(); it.hasNext();)
 			{
-				Integer frameIndex = (Integer)it.next();
+				Integer frameIndex = (Integer) it.next();
 
 				if (frameIndex.intValue() >= animationLength)
 					throw new RuntimeException("invalid frame index: " + frameIndex + " (" + getIconName() + ")");
@@ -262,16 +269,14 @@ public class TextureLoader extends TextureAtlasSprite
 				while (framesTextureData.size() <= frameIndex.intValue())
 					framesTextureData.add(null);
 
-				int [][] data = new int [1 + mipmapLevels] [];
+				int[][] data = new int[1 + mipmapLevels][];
 				data[0] = Arrays.copyOfRange(rgbaData, frameIndex.intValue() * ppf, (frameIndex.intValue() + 1) * ppf);
 
 				try
 				{
-					fixTransparentPixels.invoke(this, new Object []
-					{
-						data
-					});
-				} catch (Exception e)
+					fixTransparentPixels.invoke(this, new Object[] { data });
+				}
+				catch (Exception e)
 				{
 					throw new RuntimeException(e);
 				}
@@ -282,16 +287,14 @@ public class TextureLoader extends TextureAtlasSprite
 		{
 			for (int i = 0; i < animationLength; i++)
 			{
-				int [][] data = new int [1 + mipmapLevels] [];
+				int[][] data = new int[1 + mipmapLevels][];
 				data[0] = Arrays.copyOfRange(rgbaData, i * ppf, (i + 1) * ppf);
 
 				try
 				{
-					fixTransparentPixels.invoke(this, new Object []
-					{
-						data
-					});
-				} catch (Exception e)
+					fixTransparentPixels.invoke(this, new Object[] { data });
+				}
+				catch (Exception e)
 				{
 					throw new RuntimeException(e);
 				}

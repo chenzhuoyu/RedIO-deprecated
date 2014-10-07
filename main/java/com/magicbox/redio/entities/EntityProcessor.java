@@ -23,6 +23,7 @@ public class EntityProcessor extends EntityBase
 {
 	private double heatValue = 0.0d;
 	private boolean isPowered = false;
+	private boolean isDamaged = false;
 
 	private final Random random = new Random();
 	private final Interpreter interpreter = new Interpreter();
@@ -90,12 +91,17 @@ public class EntityProcessor extends EntityBase
 		setPowered(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 
 		if (isPowered)
-			heatValue += 1.0d;
+			heatValue += isDamaged ? 1.0d : 0.5d;
 		else
-			heatValue -= 0.5d;
+			heatValue -= (heatValue <= 0.0d) ? 0 : 0.2d;
 
 		if (!worldObj.isRemote && heatValue >= 100.0d)
 			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
+		else if (worldObj.isRemote && heatValue >= 80.0d)
+		{
+			isDamaged = true;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
 		else if (worldObj.isRemote && heatValue >= 60.0d)
 			worldObj.spawnParticle("largesmoke", xCoord + random.nextDouble(), yCoord, zCoord + random.nextDouble(), 0.0d, 0.05d, 0.0d);
 	}
@@ -103,7 +109,7 @@ public class EntityProcessor extends EntityBase
 	@Override
 	public int getTextureIndex(int side, int meta)
 	{
-		return Constants.FACING_SIDE[meta][side] + (isPowered ? 0 : 6);
+		return Constants.FACING_SIDE[meta][side] + (isPowered ? 0 : 6) + (!isDamaged ? 0 : 12);
 	}
 
 	@Override

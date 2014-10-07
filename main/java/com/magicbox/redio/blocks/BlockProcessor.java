@@ -25,7 +25,7 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public int getTextureCount()
 	{
-		return 12;
+		return 24;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class BlockProcessor extends BlockBase
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
 	{
 		TileEntity entity = world.getTileEntity(x, y, z);
-		return entity instanceof EntityProcessor ? ((EntityProcessor)entity).getPowered() : false;
+		return entity instanceof EntityProcessor ? ((EntityProcessor) entity).getPowered() : false;
 	}
 
 	@Override
