@@ -92,9 +92,9 @@ public class EntityProcessor extends EntityBase
 		else
 			heatValue -= 0.5d;
 
-		if (heatValue >= 100.0d)
+		if (!worldObj.isRemote && heatValue >= 100.0d)
 			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
-		else if (heatValue >= 60.0d)
+		else if (worldObj.isRemote && heatValue >= 60.0d)
 			worldObj.spawnParticle("largesmoke", xCoord + random.nextDouble(), yCoord, zCoord + random.nextDouble(), 0.0d, 0.05d, 0.0d);
 	}
 
