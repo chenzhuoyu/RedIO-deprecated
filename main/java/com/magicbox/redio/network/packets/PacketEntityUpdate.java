@@ -7,14 +7,14 @@ import com.magicbox.redio.entities.EntityBase;
 
 public class PacketEntityUpdate extends PacketUpdate
 {
-	public PacketEntityUpdate()
+	public PacketEntityUpdate(int id)
 	{
-		super(0);
+		super(id);
 	}
 
-	public PacketEntityUpdate(EntityBase entity)
+	public PacketEntityUpdate(int id, EntityBase entity)
 	{
-		super(0);
+		super(id);
 		xCoord = entity.xCoord;
 		yCoord = entity.yCoord;
 		zCoord = entity.zCoord;

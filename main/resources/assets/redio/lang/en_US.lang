@@ -1,5 +1,5 @@
 itemGroup.RedIO=RedIO
 
+tile.busCable.name=Bus Cable
 tile.processor.name=Processor
 tile.scriptStorage.name=Script Storage
-tile.busCable.name=BUS Cable

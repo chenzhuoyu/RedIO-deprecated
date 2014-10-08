@@ -18,6 +18,9 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 
 	protected void renderFace(RenderBlocks renderer, Block block, double x, double y, double z, int face, IIcon texture)
 	{
+		if (renderer.hasOverrideBlockTexture())
+			texture = renderer.overrideBlockTexture;
+
 		Tessellator tessellator = Tessellator.instance;
 
 		double minX = x + renderer.renderMinX;
@@ -109,6 +112,9 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
+		block.setBlockBoundsBasedOnState(world, x, y, z);
+		renderer.setRenderBoundsFromBlock(block);
+
 		int f = block.colorMultiplier(world, x, y, z);
 		int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 

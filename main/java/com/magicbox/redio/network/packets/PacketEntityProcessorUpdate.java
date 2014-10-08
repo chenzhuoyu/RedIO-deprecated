@@ -12,12 +12,12 @@ public class PacketEntityProcessorUpdate extends PacketEntityUpdate
 
 	public PacketEntityProcessorUpdate()
 	{
-		super();
+		super(0);
 	}
 
 	public PacketEntityProcessorUpdate(EntityProcessor entity)
 	{
-		super(entity);
+		super(0, entity);
 		isDamaged = entity.getDamaged();
 		isPowered = entity.getPowered();
 		heatValue = entity.getHeatValue();
