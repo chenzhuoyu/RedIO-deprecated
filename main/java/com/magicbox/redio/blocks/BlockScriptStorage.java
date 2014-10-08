@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
 
 public class BlockScriptStorage extends BlockBase
@@ -24,6 +25,30 @@ public class BlockScriptStorage extends BlockBase
 	public int getTextureCount()
 	{
 		return 6;
+	}
+
+	@Override
+	public boolean canPlaceBlockAt(World world, int x, int y, int z)
+	{
+		if (!super.canPlaceBlockAt(world, x, y, z))
+			return false;
+
+		// @formatter:off
+		TileEntity [] entities = new TileEntity[]
+		{
+			world.getTileEntity(x - 1, y, z),
+			world.getTileEntity(x + 1, y, z),
+			world.getTileEntity(x, y, z - 1),
+			world.getTileEntity(x, y, z + 1),
+			world.getTileEntity(x, y + 1, z),
+		};
+
+		// @formatter:on
+		for (TileEntity entity : entities)
+			if (entity instanceof EntityProcessor)
+				return true;
+
+		return false;
 	}
 
 	@Override

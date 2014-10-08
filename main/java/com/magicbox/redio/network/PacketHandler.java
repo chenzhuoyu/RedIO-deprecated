@@ -3,6 +3,7 @@ package com.magicbox.redio.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -17,25 +18,30 @@ public class PacketHandler extends SimpleChannelInboundHandler<IPacketProtocol>
 	@Override
 	protected void channelRead0(ChannelHandlerContext context, IPacketProtocol packetProtocol) throws Exception
 	{
-		switch (packetProtocol.getPacketId())
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+
+		if (player != null)
 		{
-			case Constants.Packets.packetBusCable:
-			case Constants.Packets.packetProcessor:
-			case Constants.Packets.packetScriptStorage:
+			switch (packetProtocol.getPacketId())
 			{
-				World world = Minecraft.getMinecraft().thePlayer.worldObj;
-				PacketEntityUpdateBase update = (PacketEntityUpdateBase)packetProtocol;
+				case Constants.Packets.packetBusCable:
+				case Constants.Packets.packetProcessor:
+				case Constants.Packets.packetScriptStorage:
+				{
+					World world = player.worldObj;
+					PacketEntityUpdateBase update = (PacketEntityUpdateBase)packetProtocol;
 
-				if (!update.isExists(world))
-					return;
+					if (!update.isExists(world))
+						return;
 
-				TileEntity entity = update.getTarget(world);
+					TileEntity entity = update.getTarget(world);
 
-				if (!(entity instanceof EntityBase))
-					return;
+					if (!(entity instanceof EntityBase))
+						return;
 
-				((EntityBase)entity).handleUpdatePacket(update);
-				break;
+					((EntityBase)entity).handleUpdatePacket(update);
+					break;
+				}
 			}
 		}
 	}
