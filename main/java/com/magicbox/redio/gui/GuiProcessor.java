@@ -9,8 +9,7 @@ import com.magicbox.redio.common.Constants;
 
 public class GuiProcessor extends GuiContainer
 {
-
-	public static ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.getGuiName(Constants.Processor.BLOCK_NAME));
+	public static ResourceLocation guiTexture = Constants.getGuiTextureLocation(Constants.Processor.BLOCK_NAME);
 
 	public GuiProcessor(Container par1Container)
 	{
@@ -22,5 +21,4 @@ public class GuiProcessor extends GuiContainer
 	{
 		Minecraft.getMinecraft().getTextureManager().bindTexture(guiTexture);
 	}
-
 }
