@@ -12,7 +12,7 @@ public class GuiHandler implements IGuiHandler
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity te = world.getTileEntity(x, y, z);
-
+		if(ID == )
 		return null;
 	}
 
