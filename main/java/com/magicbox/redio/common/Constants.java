@@ -28,6 +28,7 @@ public class Constants
 	{
 		public static final int packetBusCable = 0;
 		public static final int packetProcessor = 1;
+		public static final int packetScriptStorage = 2;
 	}
 
 	public interface Recipes

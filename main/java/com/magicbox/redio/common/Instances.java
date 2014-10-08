@@ -5,8 +5,10 @@ import net.minecraft.block.material.Material;
 import com.magicbox.redio.CreativeTab;
 import com.magicbox.redio.blocks.BlockBusCable;
 import com.magicbox.redio.blocks.BlockProcessor;
+import com.magicbox.redio.blocks.BlockScriptStorage;
 import com.magicbox.redio.entities.EntityBusCable;
 import com.magicbox.redio.entities.EntityProcessor;
+import com.magicbox.redio.entities.EntityScriptStorage;
 import com.magicbox.redio.renderers.RendererBusCable;
 import com.magicbox.redio.renderers.RendererGlobal;
 
@@ -18,12 +20,14 @@ public class Instances
 	{
 		public static final BlockBusCable blockBusCable = new BlockBusCable(Material.cloth);
 		public static final BlockProcessor blockProcessor = new BlockProcessor(Material.rock);
+		public static final BlockScriptStorage blockScriptStorage = new BlockScriptStorage(Material.rock);
 	}
 
 	public interface Entities
 	{
 		public static final Class entityBusCable = EntityBusCable.class;
 		public static final Class entityProcessor = EntityProcessor.class;
+		public static final Class entityScriptStorage = EntityScriptStorage.class;
 	}
 
 	public interface Renderers

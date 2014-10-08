@@ -21,6 +21,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<IPacketProtocol>
 		{
 			case Constants.Packets.packetBusCable:
 			case Constants.Packets.packetProcessor:
+			case Constants.Packets.packetScriptStorage:
 			{
 				World world = Minecraft.getMinecraft().thePlayer.worldObj;
 				PacketEntityUpdateBase update = (PacketEntityUpdateBase)packetProtocol;
