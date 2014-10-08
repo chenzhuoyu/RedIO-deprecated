@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.entities.EntityProcessor;
+import com.magicbox.redio.entities.EntityScriptStorage;
 
 public class BlockProcessor extends BlockBase
 {
@@ -57,11 +58,49 @@ public class BlockProcessor extends BlockBase
 	{
 		dropCount = 0;
 		super.onBlockExploded(world, x, y, z, explosion);
+
+		// @formatter:off
+		TileEntity [] entities = new TileEntity[]
+		{
+			world.getTileEntity(x - 1, y, z),
+			world.getTileEntity(x + 1, y, z),
+			world.getTileEntity(x, y, z - 1),
+			world.getTileEntity(x, y, z + 1),
+			world.getTileEntity(x, y - 1, z),
+		};
+
+		// @formatter:on
+		for (TileEntity entity : entities)
+			if (entity instanceof EntityScriptStorage)
+				world.setBlockToAir(entity.xCoord, entity.yCoord, entity.zCoord);
 	}
 
 	@Override
 	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
 	{
 		dropCount = 1;
+
+		// @formatter:off
+		TileEntity [] entities = new TileEntity[]
+		{
+			world.getTileEntity(x - 1, y, z),
+			world.getTileEntity(x + 1, y, z),
+			world.getTileEntity(x, y, z - 1),
+			world.getTileEntity(x, y, z + 1),
+			world.getTileEntity(x, y - 1, z),
+		};
+
+		// @formatter:on
+		for (TileEntity entity : entities)
+		{
+			if (entity instanceof EntityScriptStorage)
+			{
+				int metadata = world.getBlockMetadata(entity.xCoord, entity.yCoord, entity.zCoord);
+				BlockScriptStorage block = (BlockScriptStorage)((EntityScriptStorage)entity).getBlockType();
+
+				world.setBlockToAir(entity.xCoord, entity.yCoord, entity.zCoord);
+				block.dropBlockAsItem(world, entity.xCoord, entity.yCoord, entity.zCoord, metadata, 0);
+			}
+		}
 	}
 }
