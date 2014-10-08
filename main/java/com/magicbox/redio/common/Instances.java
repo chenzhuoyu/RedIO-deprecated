@@ -7,6 +7,7 @@ import com.magicbox.redio.blocks.BlockBusCable;
 import com.magicbox.redio.blocks.BlockProcessor;
 import com.magicbox.redio.entities.EntityBusCable;
 import com.magicbox.redio.entities.EntityProcessor;
+import com.magicbox.redio.renderers.RendererBusCable;
 import com.magicbox.redio.renderers.RendererGlobal;
 
 public class Instances
@@ -28,5 +29,6 @@ public class Instances
 	public interface Renderers
 	{
 		public static final RendererGlobal rendererGlobal = new RendererGlobal();
+		public static final RendererBusCable rendererBusCable = new RendererBusCable();
 	}
 }

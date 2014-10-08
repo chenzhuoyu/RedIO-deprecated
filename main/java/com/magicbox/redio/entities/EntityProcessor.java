@@ -12,7 +12,7 @@ import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.network.Network;
 import com.magicbox.redio.network.packets.PacketEntityProcessorUpdate;
-import com.magicbox.redio.network.packets.PacketEntityUpdate;
+import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
 import com.magicbox.redio.script.compiler.Compiler;
 import com.magicbox.redio.script.engine.Interpreter;
 import com.magicbox.redio.script.objects.console.RedConsoleObject;
@@ -108,14 +108,13 @@ public class EntityProcessor extends EntityBase
 	}
 
 	@Override
-	public void handleUpdatePacket(PacketEntityUpdate packet)
+	public void handleUpdatePacket(PacketEntityUpdateBase packet)
 	{
 		PacketEntityProcessorUpdate updates = (PacketEntityProcessorUpdate)packet;
 
 		isDamaged = updates.getDamaged();
 		isPowered = updates.getPowered();
 		heatValue = updates.getHeatValue();
-
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 }

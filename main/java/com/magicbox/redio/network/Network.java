@@ -3,7 +3,7 @@ package com.magicbox.redio.network;
 import java.util.EnumMap;
 
 import com.magicbox.redio.common.Constants;
-import com.magicbox.redio.network.packets.PacketBase;
+import com.magicbox.redio.network.packets.IPacketProtocol;
 
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -17,24 +17,24 @@ public class Network
 		new ChannelHandler(),
 		new PacketHandler());
 
-	public static void sendToServer(PacketBase packet)
+	public static void sendToServer(IPacketProtocol packetProtocol)
 	{
 		try
 		{
 			channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-			channels.get(Side.CLIENT).writeOutbound(packet);
+			channels.get(Side.CLIENT).writeOutbound(packetProtocol);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
 
-	public static void broadcastToClients(PacketBase packet)
+	public static void broadcastToClients(IPacketProtocol packetProtocol)
 	{
 		try
 		{
 			channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
-			channels.get(Side.SERVER).writeOutbound(packet);
+			channels.get(Side.SERVER).writeOutbound(packetProtocol);
 		} catch (Exception e)
 		{
 			e.printStackTrace();

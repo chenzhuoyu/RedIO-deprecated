@@ -6,22 +6,24 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.entities.EntityBase;
-import com.magicbox.redio.network.packets.PacketBase;
-import com.magicbox.redio.network.packets.PacketEntityUpdate;
+import com.magicbox.redio.network.packets.IPacketProtocol;
+import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
 
 @ChannelHandler.Sharable
-public class PacketHandler extends SimpleChannelInboundHandler<PacketBase>
+public class PacketHandler extends SimpleChannelInboundHandler<IPacketProtocol>
 {
 	@Override
-	protected void channelRead0(ChannelHandlerContext context, PacketBase packet) throws Exception
+	protected void channelRead0(ChannelHandlerContext context, IPacketProtocol packetProtocol) throws Exception
 	{
-		switch (packet.getPacketId())
+		switch (packetProtocol.getPacketId())
 		{
-			case 0:
+			case Constants.Packets.packetBusCable:
+			case Constants.Packets.packetProcessor:
 			{
 				World world = Minecraft.getMinecraft().thePlayer.worldObj;
-				PacketEntityUpdate update = (PacketEntityUpdate)packet;
+				PacketEntityUpdateBase update = (PacketEntityUpdateBase)packetProtocol;
 
 				if (!update.isExists(world))
 					return;

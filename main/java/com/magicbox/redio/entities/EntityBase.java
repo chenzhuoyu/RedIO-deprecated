@@ -2,14 +2,14 @@ package com.magicbox.redio.entities;
 
 import net.minecraft.tileentity.TileEntity;
 
-import com.magicbox.redio.network.packets.PacketEntityUpdate;
+import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
 
 public abstract class EntityBase extends TileEntity
 {
 	// @formatter:off
 	public abstract void updateClientEntity();
 	public abstract void updateServerEntity();
-	public abstract void handleUpdatePacket(PacketEntityUpdate packet);
+	public abstract void handleUpdatePacket(PacketEntityUpdateBase packet);
 	// @formatter:on
 
 	public int getFacing()
