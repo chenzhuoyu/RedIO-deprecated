@@ -45,7 +45,7 @@ public class EntityBusCable extends EntityBase
 	@Override
 	public void updateClientEntity()
 	{
-		// Nothing to do
+		// Nothing to update
 	}
 
 	@Override
