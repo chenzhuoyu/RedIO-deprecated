@@ -33,27 +33,17 @@ public class Constants
 
 	public interface Recipes
 	{
-		public static final Object [] recipeBusCableVertical = new Object []
-		{
-			Instances.Blocks.blockBusCable,
-			1,
-			new Object []
-			{
-				Blocks.wool, Items.redstone, Blocks.wool, Blocks.iron_bars, Items.redstone, Blocks.iron_bars, Blocks.wool, Items.redstone,
-				Blocks.wool,
-			}
-		};
+		public static final Object[] recipeBusCableVertical = new Object[] {
+				Instances.Blocks.blockBusCable,
+				1,
+				new Object[] { Blocks.wool, Items.redstone, Blocks.wool, Blocks.iron_bars, Items.redstone, Blocks.iron_bars, Blocks.wool,
+						Items.redstone, Blocks.wool, } };
 
-		public static final Object [] recipeBusCableHorizontal = new Object []
-		{
-			Instances.Blocks.blockBusCable,
-			1,
-			new Object []
-			{
-				Blocks.wool, Blocks.iron_bars, Blocks.wool, Items.redstone, Items.redstone, Items.redstone, Blocks.wool, Blocks.iron_bars,
-				Blocks.wool,
-			}
-		};
+		public static final Object[] recipeBusCableHorizontal = new Object[] {
+				Instances.Blocks.blockBusCable,
+				1,
+				new Object[] { Blocks.wool, Blocks.iron_bars, Blocks.wool, Items.redstone, Items.redstone, Items.redstone, Blocks.wool,
+						Blocks.iron_bars, Blocks.wool, } };
 	}
 
 	public interface BusCable
@@ -77,6 +67,10 @@ public class Constants
 
 		public static final String SCRIPT_EXT = ".py";
 		public static final String SCRIPT_FOLDER = "scripts";
+
+		public static final int GUI_ID = 0;
+		public static final int GUI_X_SIZE = 176;
+		public static final int GUI_Y_SIZE = 166;
 	}
 
 	public static String getTextureName(String blockName)

@@ -22,6 +22,7 @@ public class BlockProcessor extends BlockBase
 		super(material);
 
 		setHardness(3.0f);
+		setResistance(3.0f);
 		setHarvestLevel("pickaxe", 1);
 
 		setBlockName(Constants.Processor.BLOCK_NAME);
@@ -44,7 +45,7 @@ public class BlockProcessor extends BlockBase
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
 	{
 		TileEntity entity = world.getTileEntity(x, y, z);
-		return entity instanceof EntityProcessor ? ((EntityProcessor)entity).getPowered() : false;
+		return entity instanceof EntityProcessor ? ((EntityProcessor) entity).getPowered() : false;
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class BlockProcessor extends BlockBase
 			if (entity instanceof EntityScriptStorage)
 			{
 				int metadata = world.getBlockMetadata(entity.xCoord, entity.yCoord, entity.zCoord);
-				BlockScriptStorage block = (BlockScriptStorage)((EntityScriptStorage)entity).getBlockType();
+				BlockScriptStorage block = (BlockScriptStorage) ((EntityScriptStorage) entity).getBlockType();
 
 				world.setBlockToAir(entity.xCoord, entity.yCoord, entity.zCoord);
 				block.dropBlockAsItem(world, entity.xCoord, entity.yCoord, entity.zCoord, metadata, 0);
