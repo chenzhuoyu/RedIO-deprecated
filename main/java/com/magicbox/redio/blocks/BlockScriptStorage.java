@@ -1,11 +1,14 @@
 package com.magicbox.redio.blocks;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.entities.EntityScriptStorage;
+
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 
 public class BlockScriptStorage extends BlockBase
 {
@@ -30,5 +33,15 @@ public class BlockScriptStorage extends BlockBase
 	public TileEntity createNewTileEntity(World world, int meta)
 	{
 		return new EntityScriptStorage();
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz)
+	{
+		if (world.isRemote || player.isSneaking())
+			return false;
+
+		FMLNetworkHandler.openGui(player, Constants.MOD_ID, 0, world, x, y, z);
+		return true;
 	}
 }

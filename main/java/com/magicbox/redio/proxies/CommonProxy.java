@@ -7,7 +7,9 @@ import net.minecraft.block.Block;
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Instances;
 import com.magicbox.redio.common.Utils;
+import com.magicbox.redio.gui.GuiHandler;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy
@@ -51,7 +53,7 @@ public class CommonProxy
 
 	public void registerGuiHandler()
 	{
-		;
+		NetworkRegistry.INSTANCE.registerGuiHandler(Constants.MOD_ID, new GuiHandler());
 	}
 
 	public void registerCraftingRecipes()
