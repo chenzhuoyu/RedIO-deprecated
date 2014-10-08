@@ -10,13 +10,15 @@ public class Constants
 	public static final String CLIENT_PROXY = "com.magicbox.redio.proxies.ClientProxy";
 	public static final String SERVER_PROXY = "com.magicbox.redio.proxies.CommonProxy";
 
-	public static final int [][] FACING_SIDE = new int [] []
+	// @formatter:off
+	public static final int[][] FACING_SIDE = new int[][]
 	{
 		{ 0, 1, 2, 3, 4, 5 },
 		{ 0, 1, 4, 5, 3, 2 },
 		{ 0, 1, 3, 2, 5, 4 },
 		{ 0, 1, 5, 4, 2, 3 },
 	};
+	// @formatter:on
 
 	public interface BusCable
 	{
@@ -39,5 +41,10 @@ public class Constants
 	public static String getTextureName(String blockName)
 	{
 		return MOD_ID + ":" + blockName;
+	}
+
+	public static String getGuiName(String blockName)
+	{
+		return "textures/gui/" + blockName + "_gui.png";
 	}
 }
