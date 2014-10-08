@@ -2,6 +2,7 @@ package com.magicbox.redio.common;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.util.ResourceLocation;
 
 /* @formatter:off */
 public class Constants
@@ -33,21 +34,23 @@ public class Constants
 	{
 		public static final Object [] recipeBusCableVertical = new Object []
 		{
-			Instances.Blocks.blockBusCable, 1, new Object []
+			Instances.Blocks.blockBusCable,
+			1,
+			new Object []
 			{
-				Blocks.wool,		Items.redstone,		Blocks.wool,
-				Blocks.iron_bars,	Items.redstone,		Blocks.iron_bars,
-				Blocks.wool,		Items.redstone,		Blocks.wool,
+				Blocks.wool, Items.redstone, Blocks.wool, Blocks.iron_bars, Items.redstone, Blocks.iron_bars, Blocks.wool, Items.redstone,
+				Blocks.wool,
 			}
 		};
 
 		public static final Object [] recipeBusCableHorizontal = new Object []
 		{
-			Instances.Blocks.blockBusCable, 1, new Object []
+			Instances.Blocks.blockBusCable,
+			1,
+			new Object []
 			{
-				Blocks.wool,		Blocks.iron_bars,	Blocks.wool,
-				Items.redstone,		Items.redstone,		Items.redstone,
-				Blocks.wool,		Blocks.iron_bars,	Blocks.wool,
+				Blocks.wool, Blocks.iron_bars, Blocks.wool, Items.redstone, Items.redstone, Items.redstone, Blocks.wool, Blocks.iron_bars,
+				Blocks.wool,
 			}
 		};
 	}
@@ -58,10 +61,7 @@ public class Constants
 
 		public static enum Direction
 		{
-			XNegative,
-			XPositive,
-			ZNegative,
-			ZPositive
+			XNegative, XPositive, ZNegative, ZPositive
 		}
 	}
 
@@ -83,8 +83,8 @@ public class Constants
 		return MOD_ID + ":" + blockName;
 	}
 
-	public static String getGuiName(String blockName)
+	public static ResourceLocation getGuiTextureLocation(String blockName)
 	{
-		return "textures/gui/" + blockName + "_gui.png";
+		return new ResourceLocation(Constants.MOD_ID, "textures/gui/" + blockName + "_gui.png");
 	}
 }
