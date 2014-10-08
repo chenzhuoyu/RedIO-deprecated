@@ -2,9 +2,10 @@ package com.magicbox.redio.network.packets;
 
 import io.netty.buffer.ByteBuf;
 
+import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.entities.EntityProcessor;
 
-public class PacketEntityProcessorUpdate extends PacketEntityUpdate
+public class PacketEntityProcessorUpdate extends PacketEntityUpdateBase
 {
 	private double heatValue = 0.0d;
 	private boolean isDamaged = false;
@@ -12,12 +13,12 @@ public class PacketEntityProcessorUpdate extends PacketEntityUpdate
 
 	public PacketEntityProcessorUpdate()
 	{
-		super(0);
+		super(Constants.Packets.packetProcessor);
 	}
 
 	public PacketEntityProcessorUpdate(EntityProcessor entity)
 	{
-		super(0, entity);
+		super(Constants.Packets.packetProcessor, entity);
 		isDamaged = entity.getDamaged();
 		isPowered = entity.getPowered();
 		heatValue = entity.getHeatValue();

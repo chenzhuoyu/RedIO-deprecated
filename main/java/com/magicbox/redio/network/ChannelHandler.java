@@ -1,28 +1,32 @@
 package com.magicbox.redio.network;
 
-import com.magicbox.redio.network.packets.PacketBase;
-import com.magicbox.redio.network.packets.PacketEntityProcessorUpdate;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+
+import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.network.packets.IPacketProtocol;
+import com.magicbox.redio.network.packets.PacketEntityBusCableUpdate;
+import com.magicbox.redio.network.packets.PacketEntityProcessorUpdate;
+
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 
-public class ChannelHandler extends FMLIndexedMessageToMessageCodec<PacketBase>
+public class ChannelHandler extends FMLIndexedMessageToMessageCodec<IPacketProtocol>
 {
 	public ChannelHandler()
 	{
-		addDiscriminator(0, PacketEntityProcessorUpdate.class);
+		addDiscriminator(Constants.Packets.packetBusCable, PacketEntityBusCableUpdate.class);
+		addDiscriminator(Constants.Packets.packetProcessor, PacketEntityProcessorUpdate.class);
 	}
 
 	@Override
-	public void decodeInto(ChannelHandlerContext context, ByteBuf source, PacketBase packet)
+	public void decodeInto(ChannelHandlerContext context, ByteBuf source, IPacketProtocol packetProtocol)
 	{
-		packet.readData(source);
+		packetProtocol.readData(source);
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext context, PacketBase packet, ByteBuf target) throws Exception
+	public void encodeInto(ChannelHandlerContext context, IPacketProtocol packetProtocol, ByteBuf target) throws Exception
 	{
-		packet.writeData(target);
+		packetProtocol.writeData(target);
 	}
 }

@@ -25,5 +25,6 @@ public class RedIO
 		proxy.registerEntities();
 		proxy.registerRenderers();
 		proxy.registerGuiHandler();
+		proxy.registerCraftingRecipes();
 	}
 }

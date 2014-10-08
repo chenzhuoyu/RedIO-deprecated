@@ -1,5 +1,8 @@
 package com.magicbox.redio.common;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+
 /* @formatter:off */
 public class Constants
 {
@@ -20,9 +23,46 @@ public class Constants
 	};
 	// @formatter:on
 
+	public interface Packets
+	{
+		public static final int packetBusCable = 0;
+		public static final int packetProcessor = 1;
+	}
+
+	public interface Recipes
+	{
+		public static final Object [] recipeBusCableVertical = new Object []
+		{
+			Instances.Blocks.blockBusCable, 1, new Object []
+			{
+				Blocks.wool,		Items.redstone,		Blocks.wool,
+				Blocks.iron_bars,	Items.redstone,		Blocks.iron_bars,
+				Blocks.wool,		Items.redstone,		Blocks.wool,
+			}
+		};
+
+		public static final Object [] recipeBusCableHorizontal = new Object []
+		{
+			Instances.Blocks.blockBusCable, 1, new Object []
+			{
+				Blocks.wool,		Blocks.iron_bars,	Blocks.wool,
+				Items.redstone,		Items.redstone,		Items.redstone,
+				Blocks.wool,		Blocks.iron_bars,	Blocks.wool,
+			}
+		};
+	}
+
 	public interface BusCable
 	{
 		public static final String BLOCK_NAME = "busCable";
+
+		public static enum Direction
+		{
+			XNegative,
+			XPositive,
+			ZNegative,
+			ZPositive
+		}
 	}
 
 	public interface Processor
