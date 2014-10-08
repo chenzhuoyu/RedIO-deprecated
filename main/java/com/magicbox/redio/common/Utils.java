@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.Packet;
 import net.minecraft.util.MathHelper;
 
-import com.magicbox.redio.network.PacketBase;
+import com.magicbox.redio.network.packets.PacketBase;
 
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 

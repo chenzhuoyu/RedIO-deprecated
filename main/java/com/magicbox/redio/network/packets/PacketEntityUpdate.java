@@ -1,4 +1,4 @@
-package com.magicbox.redio.network;
+package com.magicbox.redio.network.packets;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

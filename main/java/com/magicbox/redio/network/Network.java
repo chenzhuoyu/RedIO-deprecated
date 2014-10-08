@@ -3,6 +3,7 @@ package com.magicbox.redio.network;
 import java.util.EnumMap;
 
 import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.network.packets.PacketBase;
 
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;

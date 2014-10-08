@@ -7,6 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.entities.EntityBase;
+import com.magicbox.redio.network.packets.PacketBase;
+import com.magicbox.redio.network.packets.PacketEntityUpdate;
 
 @ChannelHandler.Sharable
 public class PacketHandler extends SimpleChannelInboundHandler<PacketBase>

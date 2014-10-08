@@ -1,5 +1,8 @@
 package com.magicbox.redio.network;
 
+import com.magicbox.redio.network.packets.PacketBase;
+import com.magicbox.redio.network.packets.PacketEntityProcessorUpdate;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;

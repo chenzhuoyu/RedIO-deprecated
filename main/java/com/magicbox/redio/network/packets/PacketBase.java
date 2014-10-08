@@ -1,4 +1,4 @@
-package com.magicbox.redio.network;
+package com.magicbox.redio.network.packets;
 
 import io.netty.buffer.ByteBuf;
 

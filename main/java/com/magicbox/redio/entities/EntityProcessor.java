@@ -6,24 +6,23 @@ import java.util.concurrent.Executors;
 
 import javax.script.ScriptException;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.network.Network;
-import com.magicbox.redio.network.PacketEntityProcessorUpdate;
-import com.magicbox.redio.network.PacketEntityUpdate;
+import com.magicbox.redio.network.packets.PacketEntityProcessorUpdate;
+import com.magicbox.redio.network.packets.PacketEntityUpdate;
 import com.magicbox.redio.script.compiler.Compiler;
 import com.magicbox.redio.script.engine.Interpreter;
-import com.magicbox.redio.script.objects.RedBoolObject;
-import com.magicbox.redio.script.objects.RedObject;
 import com.magicbox.redio.script.objects.console.RedConsoleObject;
 
 public class EntityProcessor extends EntityBase
 {
 	private double heatValue = 0.0d;
-	private boolean isPowered = false;
 	private boolean isDamaged = false;
+	private boolean isPowered = false;
 
 	private final Random random = new Random();
 	private final Interpreter interpreter = new Interpreter();
@@ -37,35 +36,49 @@ public class EntityProcessor extends EntityBase
 			interpreter.addBuiltins("Console", new RedConsoleObject());
 			interpreter.setBytecodes(Compiler.compile("<string>", "func onPowerChanged(powered) {}"));
 			interpreter.run();
-		}
-		catch (ScriptException e)
+		} catch (ScriptException e)
 		{
 			e.printStackTrace();
 		}
 	}
 
-	private void invokePowerChanged()
+	@Override
+	protected void updateClientEntity()
 	{
-		final RedObject callable = interpreter.getObject("onPowerChanged");
-
-		if (callable != null)
+		if (heatValue >= 60.0d)
 		{
-			threadPool.execute(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					try
-					{
-						callable.invoke(RedBoolObject.fromBoolean(isPowered));
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-				}
-			});
+			double x = xCoord + random.nextDouble();
+			double z = zCoord + random.nextDouble();
+			worldObj.spawnParticle("largesmoke", x, yCoord, z, 0.0d, 0.05d, 0.0d);
 		}
+	}
+
+	@Override
+	protected void updateServerEntity()
+	{
+		isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		heatValue += isPowered ? isDamaged ? 1.0d : 0.5d : -0.2d;
+
+		if (heatValue < 0.0d)
+			heatValue = 0.0d;
+
+		if (heatValue >= 80.0d)
+			isDamaged = true;
+
+		if (heatValue < 100.0d)
+			Network.broadcastToClients(new PacketEntityProcessorUpdate(this));
+		else
+			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
+	}
+
+	public double getHeatValue()
+	{
+		return heatValue;
+	}
+
+	public boolean getDamaged()
+	{
+		return isDamaged;
 	}
 
 	public boolean getPowered()
@@ -73,37 +86,20 @@ public class EntityProcessor extends EntityBase
 		return isPowered;
 	}
 
-	public void setPowered(boolean powered)
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
 	{
-		if (powered != isPowered)
-		{
-			isPowered = powered;
-			invokePowerChanged();
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-			Network.broadcastToClients(new PacketEntityProcessorUpdate(this));
-		}
+		super.writeToNBT(nbt);
+		nbt.setDouble("heatValue", heatValue);
+		nbt.setBoolean("isDamaged", isDamaged);
 	}
 
 	@Override
-	public void updateEntity()
+	public void readFromNBT(NBTTagCompound nbt)
 	{
-		super.updateEntity();
-		setPowered(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
-
-		if (isPowered)
-			heatValue += isDamaged ? 1.0d : 0.5d;
-		else
-			heatValue -= (heatValue <= 0.0d) ? 0 : 0.2d;
-
-		if (!worldObj.isRemote && heatValue >= 100.0d)
-			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
-		else if (worldObj.isRemote && heatValue >= 80.0d)
-		{
-			isDamaged = true;
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		}
-		else if (worldObj.isRemote && heatValue >= 60.0d)
-			worldObj.spawnParticle("largesmoke", xCoord + random.nextDouble(), yCoord, zCoord + random.nextDouble(), 0.0d, 0.05d, 0.0d);
+		super.readFromNBT(nbt);
+		heatValue = nbt.getDouble("heatValue");
+		isDamaged = nbt.getBoolean("isDamaged");
 	}
 
 	@Override
@@ -121,6 +117,12 @@ public class EntityProcessor extends EntityBase
 	@Override
 	public void handleUpdatePacket(PacketEntityUpdate packet)
 	{
-		setPowered(((PacketEntityProcessorUpdate) packet).getPowered());
+		PacketEntityProcessorUpdate updates = (PacketEntityProcessorUpdate)packet;
+
+		isDamaged = updates.getDamaged();
+		isPowered = updates.getPowered();
+		heatValue = updates.getHeatValue();
+
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 }
