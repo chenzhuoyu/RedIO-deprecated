@@ -85,6 +85,6 @@ public class Constants
 
 	public static ResourceLocation getGuiTextureLocation(String blockName)
 	{
-		return new ResourceLocation(Constants.MOD_ID, "textures/gui/" + blockName + "_gui.png");
+		return new ResourceLocation(MOD_ID, "textures/gui/" + blockName + "_gui.png");
 	}
 }
