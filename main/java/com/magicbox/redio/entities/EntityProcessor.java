@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import javax.script.ScriptException;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Utils;
@@ -40,35 +39,6 @@ public class EntityProcessor extends EntityBase
 		{
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	protected void updateClientEntity()
-	{
-		if (heatValue >= 60.0d)
-		{
-			double x = xCoord + random.nextDouble();
-			double z = zCoord + random.nextDouble();
-			worldObj.spawnParticle("largesmoke", x, yCoord, z, 0.0d, 0.05d, 0.0d);
-		}
-	}
-
-	@Override
-	protected void updateServerEntity()
-	{
-		isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-		heatValue += isPowered ? isDamaged ? 1.0d : 0.5d : -0.2d;
-
-		if (heatValue < 0.0d)
-			heatValue = 0.0d;
-
-		if (heatValue >= 80.0d)
-			isDamaged = true;
-
-		if (heatValue < 100.0d)
-			Network.broadcastToClients(new PacketEntityProcessorUpdate(this));
-		else
-			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
 	}
 
 	public double getHeatValue()
@@ -109,9 +79,32 @@ public class EntityProcessor extends EntityBase
 	}
 
 	@Override
-	public Packet getDescriptionPacket()
+	public void updateClientEntity()
 	{
-		return Utils.toPacket(new PacketEntityProcessorUpdate(this), 0);
+		if (heatValue >= 60.0d)
+		{
+			double x = xCoord + random.nextDouble();
+			double z = zCoord + random.nextDouble();
+			worldObj.spawnParticle("largesmoke", x, yCoord, z, 0.0d, 0.05d, 0.0d);
+		}
+	}
+
+	@Override
+	public void updateServerEntity()
+	{
+		isPowered = Utils.isEntityPowered(this);
+		heatValue += isPowered ? isDamaged ? 1.0d : 0.5d : -0.2d;
+
+		if (heatValue < 0.0d)
+			heatValue = 0.0d;
+
+		if (heatValue >= 80.0d)
+			isDamaged = true;
+
+		if (heatValue < 100.0d)
+			Network.broadcastToClients(new PacketEntityProcessorUpdate(this));
+		else
+			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
 	}
 
 	@Override
