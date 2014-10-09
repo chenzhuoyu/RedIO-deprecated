@@ -35,7 +35,8 @@ public class EntityProcessor extends EntityBase
 			interpreter.addBuiltins("Console", new RedConsoleObject());
 			interpreter.setBytecodes(Compiler.compile("<string>", "func onPowerChanged(powered) {}"));
 			interpreter.run();
-		} catch (ScriptException e)
+		}
+		catch (ScriptException e)
 		{
 			e.printStackTrace();
 		}
@@ -104,13 +105,13 @@ public class EntityProcessor extends EntityBase
 		if (heatValue < 100.0d)
 			Network.broadcastToClients(new PacketEntityProcessorUpdate(this));
 		else
-			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 5.0f, true);
+			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 2.0f, true);
 	}
 
 	@Override
 	public void handleUpdatePacket(PacketEntityUpdateBase packet)
 	{
-		PacketEntityProcessorUpdate updates = (PacketEntityProcessorUpdate)packet;
+		PacketEntityProcessorUpdate updates = (PacketEntityProcessorUpdate) packet;
 
 		isDamaged = updates.getDamaged();
 		isPowered = updates.getPowered();

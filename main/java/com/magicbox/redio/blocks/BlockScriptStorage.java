@@ -18,6 +18,7 @@ public class BlockScriptStorage extends BlockBase
 		super(material);
 
 		setHardness(3.0f);
+		setResistance(5.0f);
 		setHarvestLevel("pickaxe", 1);
 
 		setBlockName(Constants.ScriptStorage.BLOCK_NAME);
@@ -27,7 +28,7 @@ public class BlockScriptStorage extends BlockBase
 	@Override
 	public int getTextureCount()
 	{
-		return 6;
+		return 12;
 	}
 
 	@Override
@@ -45,10 +46,12 @@ public class BlockScriptStorage extends BlockBase
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz)
 	{
-		if (world.isRemote || player.isSneaking())
+		if (player.isSneaking())
 			return false;
 
-		FMLNetworkHandler.openGui(player, Constants.MOD_ID, 0, world, x, y, z);
+		if (!world.isRemote)
+			FMLNetworkHandler.openGui(player, Constants.MOD_ID, Constants.ScriptStorage.GUI_ID, world, x, y, z);
+
 		return true;
 	}
 }
