@@ -9,7 +9,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import com.magicbox.redio.entities.EntityProcessor;
 
 public class Utils
 {
@@ -67,5 +70,25 @@ public class Utils
 	public static boolean isEntityPowered(TileEntity entity)
 	{
 		return entity.getWorldObj().isBlockIndirectlyGettingPowered(entity.xCoord, entity.yCoord, entity.zCoord);
+	}
+
+	public static boolean hasProcessorAround(World world, int x, int y, int z)
+	{
+		// @formatter:off
+		TileEntity [] entities = new TileEntity[]
+		{
+			world.getTileEntity(x - 1, y, z),
+			world.getTileEntity(x + 1, y, z),
+			world.getTileEntity(x, y, z - 1),
+			world.getTileEntity(x, y, z + 1),
+			world.getTileEntity(x, y + 1, z),
+		};
+
+		// @formatter:on
+		for (TileEntity entity : entities)
+			if (entity instanceof EntityProcessor)
+				return true;
+
+		return false;
 	}
 }

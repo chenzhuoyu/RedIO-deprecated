@@ -9,6 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
@@ -98,8 +99,11 @@ public class BlockProcessor extends BlockBase
 				int metadata = world.getBlockMetadata(entity.xCoord, entity.yCoord, entity.zCoord);
 				BlockScriptStorage block = (BlockScriptStorage)((EntityScriptStorage)entity).getBlockType();
 
-				world.setBlockToAir(entity.xCoord, entity.yCoord, entity.zCoord);
-				block.dropBlockAsItem(world, entity.xCoord, entity.yCoord, entity.zCoord, metadata, 0);
+				if (!Utils.hasProcessorAround(world, entity.xCoord, entity.yCoord, entity.zCoord))
+				{
+					world.setBlockToAir(entity.xCoord, entity.yCoord, entity.zCoord);
+					block.dropBlockAsItem(world, entity.xCoord, entity.yCoord, entity.zCoord, metadata, 0);
+				}
 			}
 		}
 	}
