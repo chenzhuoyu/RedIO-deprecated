@@ -7,6 +7,7 @@ import com.magicbox.redio.entities.EntityProcessor;
 
 public class PacketEntityProcessorUpdate extends PacketEntityUpdateBase
 {
+	private String name = "";
 	private double heatValue = 0.0d;
 	private boolean isDamaged = false;
 	private boolean isPowered = false;
@@ -22,6 +23,11 @@ public class PacketEntityProcessorUpdate extends PacketEntityUpdateBase
 		isDamaged = entity.getDamaged();
 		isPowered = entity.getPowered();
 		heatValue = entity.getHeatValue();
+	}
+
+	public String getName()
+	{
+		return name;
 	}
 
 	public double getHeatValue()
@@ -43,6 +49,13 @@ public class PacketEntityProcessorUpdate extends PacketEntityUpdateBase
 	public void readData(ByteBuf buffer)
 	{
 		super.readData(buffer);
+
+		int length = buffer.readInt();
+		byte [] data = new byte [length];
+
+		buffer.readBytes(data);
+
+		name = new String(data);
 		heatValue = buffer.readDouble();
 		isDamaged = buffer.readBoolean();
 		isPowered = buffer.readBoolean();
@@ -51,7 +64,11 @@ public class PacketEntityProcessorUpdate extends PacketEntityUpdateBase
 	@Override
 	public void writeData(ByteBuf buffer)
 	{
+		byte [] data = name.getBytes();
+
 		super.writeData(buffer);
+		buffer.writeInt(data.length);
+		buffer.writeBytes(data);
 		buffer.writeDouble(heatValue);
 		buffer.writeBoolean(isDamaged);
 		buffer.writeBoolean(isPowered);

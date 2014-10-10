@@ -24,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BlockBase extends BlockContainer
 {
-	private final ArrayList<IIcon> textures = new ArrayList<IIcon>();
+	protected final ArrayList<IIcon> textures = new ArrayList<IIcon>();
 
 	protected BlockBase(Material material)
 	{
@@ -39,7 +39,7 @@ public abstract class BlockBase extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta)
 	{
-		return textures.get(Constants.FACING_SIDE[meta][side]);
+		return textures.get(Constants.FACING_SIDE[meta & 0x03][side]);
 	}
 
 	@Override
@@ -50,10 +50,10 @@ public abstract class BlockBase extends BlockContainer
 		TileEntity entity = world.getTileEntity(x, y, z);
 
 		if (!(entity instanceof EntityBase))
-			return getIcon(side, meta);
+			return getIcon(side, meta & 0x03);
 
 		int index = ((EntityBase)entity).getTextureIndex(side, meta);
-		return index == -1 ? getIcon(side, meta) : textures.get(index);
+		return index == -1 ? getIcon(side, meta & 0x03) : textures.get(index);
 	}
 
 	@Override

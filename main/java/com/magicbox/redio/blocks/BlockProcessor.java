@@ -1,23 +1,32 @@
 package com.magicbox.redio.blocks;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.common.Instances;
 import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockProcessor extends BlockBase
 {
-	private int dropCount = 0;
-
 	public BlockProcessor(Material material)
 	{
 		super(material);
@@ -31,6 +40,19 @@ public class BlockProcessor extends BlockBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public int getRenderType()
+	{
+		return Instances.Renderers.rendererProcessor.getRenderId();
+	}
+
+	@Override
+	public int damageDropped(int metadata)
+	{
+		return metadata & 0x04;
+	}
+
+	@Override
 	public int getTextureCount()
 	{
 		return 24;
@@ -39,14 +61,29 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public int quantityDropped(Random random)
 	{
-		return dropCount;
+		return 0;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta)
+	{
+		return meta == -1 ? textures.get(side) : super.getIcon(side, meta);
 	}
 
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
 	{
 		TileEntity entity = world.getTileEntity(x, y, z);
-		return entity instanceof EntityProcessor ? ((EntityProcessor) entity).getPowered() : false;
+		return entity instanceof EntityProcessor ? ((EntityProcessor)entity).getPowered() : false;
+	}
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+	{
+		int damageValue = getDamageValue(world, x, y, z);
+		return new ItemStack(Item.getItemFromBlock(this), 1, damageValue)
+			.setStackDisplayName((damageValue & 0x04) == 0 ? "Processor" : "Processor (damaged)");
 	}
 
 	@Override
@@ -56,9 +93,15 @@ public class BlockProcessor extends BlockBase
 	}
 
 	@Override
+	public void getSubBlocks(Item item, CreativeTabs tab, List subitems)
+	{
+		subitems.add(new ItemStack(this, 1, 0x00).setStackDisplayName("Processor"));
+		subitems.add(new ItemStack(this, 1, 0x04).setStackDisplayName("Processor (damaged)"));
+	}
+
+	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{
-		dropCount = 0;
 		super.onBlockExploded(world, x, y, z, explosion);
 
 		// @formatter:off
@@ -74,14 +117,23 @@ public class BlockProcessor extends BlockBase
 		// @formatter:on
 		for (TileEntity entity : entities)
 			if (entity instanceof EntityScriptStorage)
-				world.setBlockToAir(entity.xCoord, entity.yCoord, entity.zCoord);
+				if (!Utils.hasProcessorAround(world, entity.xCoord, entity.yCoord, entity.zCoord))
+					world.setBlockToAir(entity.xCoord, entity.yCoord, entity.zCoord);
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack)
 	{
-		dropCount = 1;
+		int damage = itemStack.getItemDamage();
+		int facing = Utils.getPlayerFacing(entity);
 
+		world.setBlockMetadataWithNotify(x, y, z, facing | damage, 1);
+		((EntityProcessor)world.getTileEntity(x, y, z)).setDamaged((damage & 0x4) == 0x04);
+	}
+
+	@Override
+	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata)
+	{
 		// @formatter:off
 		TileEntity [] entities = new TileEntity[]
 		{
@@ -97,8 +149,7 @@ public class BlockProcessor extends BlockBase
 		{
 			if (entity instanceof EntityScriptStorage)
 			{
-				int metadata = world.getBlockMetadata(entity.xCoord, entity.yCoord, entity.zCoord);
-				BlockScriptStorage block = (BlockScriptStorage) ((EntityScriptStorage) entity).getBlockType();
+				BlockScriptStorage block = (BlockScriptStorage)((EntityScriptStorage)entity).getBlockType();
 
 				if (!Utils.hasProcessorAround(world, entity.xCoord, entity.yCoord, entity.zCoord))
 				{
@@ -107,5 +158,9 @@ public class BlockProcessor extends BlockBase
 				}
 			}
 		}
+
+		int damage = damageDropped(metadata);
+		ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1, damage);
+		dropBlockAsItem(world, x, y, z, stack.setStackDisplayName(damage == 0x00 ? "Processor" : "Processor (damaged)"));
 	}
 }

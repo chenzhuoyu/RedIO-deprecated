@@ -3,13 +3,16 @@ package com.magicbox.redio.entities;
 import net.minecraft.tileentity.TileEntity;
 
 import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.emulator.IPacketRouterNode;
 import com.magicbox.redio.network.Network;
 import com.magicbox.redio.network.packets.PacketEntityBusCableUpdate;
 import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
+import com.magicbox.redio.script.objects.RedObject;
 
-public class EntityBusCable extends EntityBase
+public class EntityBusCable extends EntityBase implements IPacketRouterNode
 {
 	private int connectivity = 0x00;
+	private boolean isDispatching = false;
 
 	public int getConnectivity()
 	{
@@ -86,5 +89,45 @@ public class EntityBusCable extends EntityBase
 
 		connectivity = updates.getConnectivity();
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public boolean dispatchPacket(String destination, RedObject packet)
+	{
+		if (isDispatching)
+			return false;
+
+		TileEntity xNeg = worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
+		TileEntity xPos = worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
+		TileEntity zNeg = worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
+		TileEntity zPos = worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
+
+		isDispatching = true;
+
+		if (xNeg instanceof IPacketRouterNode && ((IPacketRouterNode)xNeg).dispatchPacket(destination, packet))
+		{
+			isDispatching = false;
+			return true;
+		}
+
+		if (xPos instanceof IPacketRouterNode && ((IPacketRouterNode)xPos).dispatchPacket(destination, packet))
+		{
+			isDispatching = false;
+			return true;
+		}
+
+		if (zNeg instanceof IPacketRouterNode && ((IPacketRouterNode)zNeg).dispatchPacket(destination, packet))
+		{
+			isDispatching = false;
+			return true;
+		}
+
+		if (zPos instanceof IPacketRouterNode && ((IPacketRouterNode)zPos).dispatchPacket(destination, packet))
+		{
+			isDispatching = false;
+			return true;
+		}
+
+		return false;
 	}
 }

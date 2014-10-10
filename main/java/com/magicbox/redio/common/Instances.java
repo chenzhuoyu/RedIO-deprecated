@@ -11,6 +11,7 @@ import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
 import com.magicbox.redio.renderers.RendererBusCable;
 import com.magicbox.redio.renderers.RendererGlobal;
+import com.magicbox.redio.renderers.RendererProcessor;
 
 public class Instances
 {
@@ -34,5 +35,6 @@ public class Instances
 	{
 		public static final RendererGlobal rendererGlobal = new RendererGlobal();
 		public static final RendererBusCable rendererBusCable = new RendererBusCable();
+		public static final RendererProcessor rendererProcessor = new RendererProcessor();
 	}
 }
