@@ -1,5 +1,6 @@
 package com.magicbox.redio.entities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -8,6 +9,7 @@ import java.util.concurrent.Executors;
 import javax.script.ScriptException;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Utils;
@@ -19,11 +21,14 @@ import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
 import com.magicbox.redio.script.compiler.Compiler;
 import com.magicbox.redio.script.engine.BytecodeBuffer;
 import com.magicbox.redio.script.engine.Interpreter;
+import com.magicbox.redio.script.objects.RedNullObject;
 import com.magicbox.redio.script.objects.RedObject;
 import com.magicbox.redio.script.objects.console.RedConsoleObject;
 
 public class EntityProcessor extends EntityBase implements IPacketRouterNode
 {
+	private static final HashMap<String, BytecodeBuffer> compiledBytecodes = new HashMap<String, BytecodeBuffer>();
+
 	private String name = "";
 	private double heatValue = 0.0d;
 	private boolean isDamaged = false;
@@ -32,7 +37,9 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 	private final Random random = new Random();
 	private final Interpreter interpreter = new Interpreter();
 	private final ExecutorService threadPool = Executors.newSingleThreadExecutor();
-	private static final HashMap<String, BytecodeBuffer> compiledBytecodes = new HashMap<String, BytecodeBuffer>();
+
+	private RedObject onSystemTick = null;
+	private RedObject onPacketReceived = null;
 
 	public String getName()
 	{
@@ -56,7 +63,9 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 
 	public void setName(String name)
 	{
+		unregister();
 		this.name = name;
+		Utils.registerRouter(name, this);
 	}
 
 	public void setDamaged(boolean isDamaged)
@@ -80,10 +89,15 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 			this.heatValue = 0.0d;
 	}
 
+	public void unregister()
+	{
+		Utils.unregisterRouter(name, this);
+	}
+
 	public boolean loadScript(String filename, String script)
 	{
 		interpreter.reset();
-		interpreter.addBuiltins("RedIO", new RedScriptBridge());
+		interpreter.addBuiltins("RedIO", new RedScriptBridge(this));
 		interpreter.addBuiltins("Console", new RedConsoleObject());
 
 		if (compiledBytecodes.containsKey(filename))
@@ -103,7 +117,34 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 		}
 
 		interpreter.run();
+
+		onSystemTick = interpreter.getObject("onSystemTick");
+		onPacketReceived = interpreter.getObject("onPacketReceived");
 		return true;
+	}
+
+	public ArrayList<EntityBusCable> getConnectedCables()
+	{
+		ArrayList<EntityBusCable> result = new ArrayList<EntityBusCable>();
+
+		TileEntity xNeg = worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
+		TileEntity xPos = worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
+		TileEntity zNeg = worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
+		TileEntity zPos = worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
+
+		if (xNeg instanceof EntityBusCable)
+			result.add((EntityBusCable)xNeg);
+
+		if (xPos instanceof EntityBusCable)
+			result.add((EntityBusCable)xPos);
+
+		if (zNeg instanceof EntityBusCable)
+			result.add((EntityBusCable)zNeg);
+
+		if (zPos instanceof EntityBusCable)
+			result.add((EntityBusCable)zPos);
+
+		return result;
 	}
 
 	@Override
@@ -154,6 +195,25 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 			Network.broadcastToClients(new PacketEntityProcessorUpdate(this));
 		else
 			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 2.0f, true);
+
+		threadPool.execute(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (isPowered && onSystemTick != null)
+				{
+					try
+					{
+						onSystemTick.invoke();
+					} catch (RuntimeException e)
+					{
+						onSystemTick = null;
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 
 	@Override
@@ -169,11 +229,25 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 	}
 
 	@Override
-	public boolean dispatchPacket(String destination, RedObject packet)
+	public String getNodeName()
 	{
-		if (!name.equals(destination))
-			return false;
+		return name;
+	}
 
-		return false;
+	@Override
+	public RedObject dispatchPacket(IPacketRouterNode source, IPacketRouterNode previous, String destination, RedObject packet)
+	{
+		if (!name.equals(destination) || onPacketReceived == null)
+			return RedNullObject.nullObject;
+
+		try
+		{
+			return onPacketReceived.invoke(packet);
+		} catch (RuntimeException e)
+		{
+			e.printStackTrace();
+			onPacketReceived = null;
+			return RedNullObject.nullObject;
+		}
 	}
 }

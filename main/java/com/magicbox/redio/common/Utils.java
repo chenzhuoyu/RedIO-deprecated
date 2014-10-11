@@ -12,13 +12,28 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import com.magicbox.redio.emulator.IPacketRouterNode;
 import com.magicbox.redio.entities.EntityProcessor;
 
 public class Utils
 {
+	private static HashMap<String, IPacketRouterNode> mappedNodes = new HashMap<String, IPacketRouterNode>();
+
 	public static int getPlayerFacing(EntityLivingBase player)
 	{
 		return MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5d) & 0x03;
+	}
+
+	public static void registerRouter(String name, IPacketRouterNode node)
+	{
+		mappedNodes.put(name, node);
+	}
+
+	public static void unregisterRouter(String name, IPacketRouterNode node)
+	{
+		if (mappedNodes.containsKey(name))
+			if (mappedNodes.get(name) == node)
+				mappedNodes.remove(name);
 	}
 
 	public static void addCraftingRecipe(Block result, int count, Object... recipes)
@@ -67,9 +82,24 @@ public class Utils
 		}
 	}
 
+	public static String getRouterName(String prefix)
+	{
+		int i = 1;
+
+		while (mappedNodes.containsKey(prefix + i))
+			i++;
+
+		return prefix + i;
+	}
+
 	public static boolean isEntityPowered(TileEntity entity)
 	{
 		return entity.getWorldObj().isBlockIndirectlyGettingPowered(entity.xCoord, entity.yCoord, entity.zCoord);
+	}
+
+	public static boolean isRouterNameValid(String name)
+	{
+		return !mappedNodes.containsKey(name);
 	}
 
 	public static boolean hasProcessorAround(World world, int x, int y, int z)

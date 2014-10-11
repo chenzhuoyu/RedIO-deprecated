@@ -1,5 +1,7 @@
 package com.magicbox.redio.entities;
 
+import java.util.ArrayList;
+
 import net.minecraft.tileentity.TileEntity;
 
 import com.magicbox.redio.common.Constants;
@@ -7,6 +9,7 @@ import com.magicbox.redio.emulator.IPacketRouterNode;
 import com.magicbox.redio.network.Network;
 import com.magicbox.redio.network.packets.PacketEntityBusCableUpdate;
 import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
+import com.magicbox.redio.script.objects.RedNullObject;
 import com.magicbox.redio.script.objects.RedObject;
 
 public class EntityBusCable extends EntityBase implements IPacketRouterNode
@@ -92,42 +95,49 @@ public class EntityBusCable extends EntityBase implements IPacketRouterNode
 	}
 
 	@Override
-	public boolean dispatchPacket(String destination, RedObject packet)
+	public String getNodeName()
+	{
+		return null;
+	}
+
+	@Override
+	public RedObject dispatchPacket(IPacketRouterNode source, IPacketRouterNode previous, String destination, RedObject packet)
 	{
 		if (isDispatching)
-			return false;
+			return RedNullObject.nullObject;
 
 		TileEntity xNeg = worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
 		TileEntity xPos = worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
 		TileEntity zNeg = worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
 		TileEntity zPos = worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
+		ArrayList<IPacketRouterNode> nodes = new ArrayList<IPacketRouterNode>();
+
+		if (xNeg != previous && xNeg instanceof IPacketRouterNode)
+			nodes.add((IPacketRouterNode)xNeg);
+
+		if (xPos != previous && xPos instanceof IPacketRouterNode)
+			nodes.add((IPacketRouterNode)xPos);
+
+		if (zNeg != previous && zNeg instanceof IPacketRouterNode)
+			nodes.add((IPacketRouterNode)zNeg);
+
+		if (zPos != previous && zPos instanceof IPacketRouterNode)
+			nodes.add((IPacketRouterNode)zPos);
 
 		isDispatching = true;
 
-		if (xNeg instanceof IPacketRouterNode && ((IPacketRouterNode)xNeg).dispatchPacket(destination, packet))
+		for (IPacketRouterNode node : nodes)
 		{
-			isDispatching = false;
-			return true;
+			RedObject result = node.dispatchPacket(source, this, destination, packet);
+
+			if (result != null && !result.isNull())
+			{
+				isDispatching = false;
+				return result;
+			}
 		}
 
-		if (xPos instanceof IPacketRouterNode && ((IPacketRouterNode)xPos).dispatchPacket(destination, packet))
-		{
-			isDispatching = false;
-			return true;
-		}
-
-		if (zNeg instanceof IPacketRouterNode && ((IPacketRouterNode)zNeg).dispatchPacket(destination, packet))
-		{
-			isDispatching = false;
-			return true;
-		}
-
-		if (zPos instanceof IPacketRouterNode && ((IPacketRouterNode)zPos).dispatchPacket(destination, packet))
-		{
-			isDispatching = false;
-			return true;
-		}
-
-		return false;
+		isDispatching = false;
+		return RedNullObject.nullObject;
 	}
 }

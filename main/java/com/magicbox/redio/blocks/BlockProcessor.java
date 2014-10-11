@@ -89,7 +89,10 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public EntityBase createNewTileEntity(World world, int meta)
 	{
-		return new EntityProcessor();
+		EntityProcessor entity = new EntityProcessor();
+
+		entity.setName(Utils.getRouterName("Processor-"));
+		return entity;
 	}
 
 	@Override
@@ -102,6 +105,11 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{
+		TileEntity processor = world.getTileEntity(x, y, z);
+
+		if (processor instanceof EntityProcessor)
+			((EntityProcessor)processor).unregister();
+
 		super.onBlockExploded(world, x, y, z, explosion);
 
 		// @formatter:off
@@ -134,6 +142,11 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata)
 	{
+		TileEntity processor = world.getTileEntity(x, y, z);
+
+		if (processor instanceof EntityProcessor)
+			((EntityProcessor)processor).unregister();
+
 		// @formatter:off
 		TileEntity [] entities = new TileEntity[]
 		{

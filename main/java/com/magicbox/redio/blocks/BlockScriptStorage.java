@@ -38,7 +38,7 @@ public class BlockScriptStorage extends BlockBase
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta)
+	public TileEntity createNewTileEntity(World world, int metadata)
 	{
 		return new EntityScriptStorage();
 	}

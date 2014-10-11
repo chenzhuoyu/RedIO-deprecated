@@ -14,15 +14,13 @@ public class Constants
 	public static final String CLIENT_PROXY = "com.magicbox.redio.proxies.ClientProxy";
 	public static final String SERVER_PROXY = "com.magicbox.redio.proxies.CommonProxy";
 
-	// @formatter:off
-	public static final int[][] FACING_SIDE = new int[][]
+	public static final int [][] FACING_SIDE = new int [][]
 	{
 		{ 0, 1, 2, 3, 4, 5 },
 		{ 0, 1, 4, 5, 3, 2 },
 		{ 0, 1, 3, 2, 5, 4 },
 		{ 0, 1, 5, 4, 2, 3 },
 	};
-	// @formatter:on
 
 	public interface Packets
 	{
@@ -33,17 +31,30 @@ public class Constants
 
 	public interface Recipes
 	{
-		public static final Object[] recipeBusCableVertical = new Object[] {
-				Instances.Blocks.blockBusCable,
-				1,
-				new Object[] { Blocks.wool, Items.redstone, Blocks.wool, Blocks.iron_bars, Items.redstone, Blocks.iron_bars, Blocks.wool,
-						Items.redstone, Blocks.wool, } };
+		public static final Object[] recipeBusCableVertical = new Object[]
+		{
+			Instances.Blocks.blockBusCable, 1, new Object[]
+			{
+				Blocks.wool,		Items.redstone,		Blocks.wool,
+				Blocks.iron_bars,	Items.redstone,		Blocks.iron_bars,
+				Blocks.wool,		Items.redstone,		Blocks.wool,
+			}
+		};
 
-		public static final Object[] recipeBusCableHorizontal = new Object[] {
-				Instances.Blocks.blockBusCable,
-				1,
-				new Object[] { Blocks.wool, Blocks.iron_bars, Blocks.wool, Items.redstone, Items.redstone, Items.redstone, Blocks.wool,
-						Blocks.iron_bars, Blocks.wool, } };
+		public static final Object[] recipeBusCableHorizontal = new Object[]
+		{
+			Instances.Blocks.blockBusCable, 1, new Object[]
+			{
+				Blocks.wool,		Blocks.iron_bars,	Blocks.wool,
+				Items.redstone,		Items.redstone,		Items.redstone,
+				Blocks.wool,		Blocks.iron_bars,	Blocks.wool,
+			}
+		};
+	}
+
+	public interface IO
+	{
+		public static final String BLOCK_NAME = "IO";
 	}
 
 	public interface BusCable
@@ -52,7 +63,10 @@ public class Constants
 
 		public static enum Direction
 		{
-			XNegative, XPositive, ZNegative, ZPositive
+			XNegative,
+			XPositive,
+			ZNegative,
+			ZPositive,
 		}
 	}
 

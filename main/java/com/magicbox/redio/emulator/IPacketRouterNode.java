@@ -2,7 +2,9 @@ package com.magicbox.redio.emulator;
 
 import com.magicbox.redio.script.objects.RedObject;
 
+// @formatter:off
 public interface IPacketRouterNode
 {
-	public boolean dispatchPacket(String destination, RedObject packet);
+	public String getNodeName();
+	public RedObject dispatchPacket(IPacketRouterNode source, IPacketRouterNode previous, String destination, RedObject packet);
 }
