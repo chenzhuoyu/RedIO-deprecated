@@ -12,18 +12,8 @@ import com.magicbox.redio.entities.EntityBusCable;
 
 public class RendererBusCable extends RendererGlobal
 {
-	private void renderBody(
-		RenderBlocks renderer,
-		IBlockAccess world,
-		Block block,
-		int texture,
-		int x,
-		int y,
-		int z,
-		float r,
-		float g,
-		float b,
-		int brightness)
+	private void renderBody(RenderBlocks renderer, IBlockAccess world, Block block, int texture, int x, int y, int z, float r, float g,
+			float b, int brightness)
 	{
 		Tessellator tessellator = Tessellator.instance;
 
@@ -68,7 +58,7 @@ public class RendererBusCable extends RendererGlobal
 
 		int f = block.colorMultiplier(world, x, y, z);
 		int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
-		EntityBusCable busCable = (EntityBusCable)entity;
+		EntityBusCable busCable = (EntityBusCable) entity;
 
 		float b = (f >> 0 & 0xFF) / 255.0f;
 		float g = (f >> 8 & 0xFF) / 255.0f;

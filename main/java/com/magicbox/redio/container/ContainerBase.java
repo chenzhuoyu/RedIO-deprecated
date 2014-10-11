@@ -3,6 +3,7 @@ package com.magicbox.redio.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
 import com.magicbox.redio.entities.EntityBase;
@@ -10,6 +11,7 @@ import com.magicbox.redio.entities.EntityBase;
 public abstract class ContainerBase extends Container
 {
 	public EntityBase entity;
+	public IInventory inv;
 
 	protected ContainerBase(InventoryPlayer inventory)
 	{
