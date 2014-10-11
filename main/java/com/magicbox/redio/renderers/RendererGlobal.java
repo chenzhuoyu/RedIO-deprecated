@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
@@ -16,7 +17,7 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 {
 	private final int renderId = RenderingRegistry.getNextAvailableRenderId();
 
-	protected void renderFace(RenderBlocks renderer, Block block, double x, double y, double z, int face, IIcon texture)
+	protected void renderFace(RenderBlocks renderer, Block block, double x, double y, double z, int face, int facing, IIcon texture)
 	{
 		if (renderer.hasOverrideBlockTexture())
 			texture = renderer.overrideBlockTexture;
@@ -43,19 +44,89 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 		{
 			case 0:
 			{
-				tessellator.addVertexWithUV(minX, maxY, minZ, minUx, minVz);
-				tessellator.addVertexWithUV(minX, maxY, maxZ, minUx, maxVz);
-				tessellator.addVertexWithUV(maxX, maxY, maxZ, maxUx, maxVz);
-				tessellator.addVertexWithUV(maxX, maxY, minZ, maxUx, minVz);
+				switch (facing)
+				{
+					case 0:
+					{
+						tessellator.addVertexWithUV(minX, maxY, minZ, minUx, minVz);
+						tessellator.addVertexWithUV(minX, maxY, maxZ, minUx, maxVz);
+						tessellator.addVertexWithUV(maxX, maxY, maxZ, maxUx, maxVz);
+						tessellator.addVertexWithUV(maxX, maxY, minZ, maxUx, minVz);
+						break;
+					}
+
+					case 1:
+					{
+						tessellator.addVertexWithUV(minX, maxY, minZ, minUx, maxVz);
+						tessellator.addVertexWithUV(minX, maxY, maxZ, maxUx, maxVz);
+						tessellator.addVertexWithUV(maxX, maxY, maxZ, maxUx, minVz);
+						tessellator.addVertexWithUV(maxX, maxY, minZ, minUx, minVz);
+						break;
+					}
+
+					case 2:
+					{
+						tessellator.addVertexWithUV(minX, maxY, minZ, maxUx, maxVz);
+						tessellator.addVertexWithUV(minX, maxY, maxZ, maxUx, minVz);
+						tessellator.addVertexWithUV(maxX, maxY, maxZ, minUx, minVz);
+						tessellator.addVertexWithUV(maxX, maxY, minZ, minUx, maxVz);
+						break;
+					}
+
+					case 3:
+					{
+						tessellator.addVertexWithUV(minX, maxY, minZ, maxUx, minVz);
+						tessellator.addVertexWithUV(minX, maxY, maxZ, minUx, minVz);
+						tessellator.addVertexWithUV(maxX, maxY, maxZ, minUx, maxVz);
+						tessellator.addVertexWithUV(maxX, maxY, minZ, maxUx, maxVz);
+						break;
+					}
+				}
+
 				break;
 			}
 
 			case 1:
 			{
-				tessellator.addVertexWithUV(minX, minY, maxZ, maxUx, maxVz);
-				tessellator.addVertexWithUV(minX, minY, minZ, maxUx, minVz);
-				tessellator.addVertexWithUV(maxX, minY, minZ, minUx, minVz);
-				tessellator.addVertexWithUV(maxX, minY, maxZ, minUx, maxVz);
+				switch (facing)
+				{
+					case 0:
+					{
+						tessellator.addVertexWithUV(minX, minY, maxZ, maxUx, maxVz);
+						tessellator.addVertexWithUV(minX, minY, minZ, maxUx, minVz);
+						tessellator.addVertexWithUV(maxX, minY, minZ, minUx, minVz);
+						tessellator.addVertexWithUV(maxX, minY, maxZ, minUx, maxVz);
+						break;
+					}
+
+					case 1:
+					{
+						tessellator.addVertexWithUV(minX, minY, maxZ, minUx, maxVz);
+						tessellator.addVertexWithUV(minX, minY, minZ, maxUx, maxVz);
+						tessellator.addVertexWithUV(maxX, minY, minZ, maxUx, minVz);
+						tessellator.addVertexWithUV(maxX, minY, maxZ, minUx, minVz);
+						break;
+					}
+
+					case 2:
+					{
+						tessellator.addVertexWithUV(minX, minY, maxZ, minUx, minVz);
+						tessellator.addVertexWithUV(minX, minY, minZ, minUx, maxVz);
+						tessellator.addVertexWithUV(maxX, minY, minZ, maxUx, maxVz);
+						tessellator.addVertexWithUV(maxX, minY, maxZ, maxUx, minVz);
+						break;
+					}
+
+					case 3:
+					{
+						tessellator.addVertexWithUV(minX, minY, maxZ, maxUx, minVz);
+						tessellator.addVertexWithUV(minX, minY, minZ, minUx, minVz);
+						tessellator.addVertexWithUV(maxX, minY, minZ, minUx, maxVz);
+						tessellator.addVertexWithUV(maxX, minY, maxZ, maxUx, maxVz);
+						break;
+					}
+				}
+
 				break;
 			}
 
@@ -113,6 +184,7 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
 	{
 		int f = block.colorMultiplier(world, x, y, z);
+		int facing = world.getBlockMetadata(x, y, z) & 0x03;
 		int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 
 		float b = (f >> 0 & 0xFF) / 255.0f;
@@ -126,31 +198,32 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 			b = (r * 30.0f + b * 70.0f) / 100.0f;
 		}
 
+		TileEntity entity = world.getTileEntity(x, y, z);
 		Tessellator tessellator = Tessellator.instance;
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r, g, b);
-		renderFace(renderer, block, x, y, z, 0, renderer.getBlockIcon(block, world, x, y, z, 0));
+		renderFace(renderer, block, x, y, z, 0, facing, renderer.getBlockIcon(block, world, x, y, z, 0));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.5f, g * 0.5f, b * 0.5f);
-		renderFace(renderer, block, x, y, z, 1, renderer.getBlockIcon(block, world, x, y, z, 1));
+		renderFace(renderer, block, x, y, z, 1, facing, renderer.getBlockIcon(block, world, x, y, z, 1));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.6f, g * 0.6f, b * 0.6f);
-		renderFace(renderer, block, x, y, z, 2, renderer.getBlockIcon(block, world, x, y, z, 2));
+		renderFace(renderer, block, x, y, z, 2, facing, renderer.getBlockIcon(block, world, x, y, z, 2));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.6f, g * 0.6f, b * 0.6f);
-		renderFace(renderer, block, x, y, z, 3, renderer.getBlockIcon(block, world, x, y, z, 3));
+		renderFace(renderer, block, x, y, z, 3, facing, renderer.getBlockIcon(block, world, x, y, z, 3));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.8f, g * 0.8f, b * 0.8f);
-		renderFace(renderer, block, x, y, z, 4, renderer.getBlockIcon(block, world, x, y, z, 4));
+		renderFace(renderer, block, x, y, z, 4, facing, renderer.getBlockIcon(block, world, x, y, z, 4));
 
 		tessellator.setBrightness(brightness);
 		tessellator.setColorOpaque_F(r * 0.8f, g * 0.8f, b * 0.8f);
-		renderFace(renderer, block, x, y, z, 5, renderer.getBlockIcon(block, world, x, y, z, 5));
+		renderFace(renderer, block, x, y, z, 5, facing, renderer.getBlockIcon(block, world, x, y, z, 5));
 
 		return false;
 	}
@@ -169,22 +242,22 @@ public class RendererGlobal implements ISimpleBlockRenderingHandler
 		tessellator.startDrawingQuads();
 
 		tessellator.setNormal(0.0f, 1.0f, 0.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 0, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 0, 0, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
 
 		tessellator.setNormal(0.0f, -1.0f, 0.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 1, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 1, 0, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
 
 		tessellator.setNormal(-1.0f, 0.0f, 0.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 2, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 2, 0, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
 
 		tessellator.setNormal(1.0f, 0.0f, 0.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 3, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 3, 0, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
 
 		tessellator.setNormal(0.0f, 0.0f, -1.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 4, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 4, 0, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
 
 		tessellator.setNormal(0.0f, 0.0f, 1.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 5, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 5, 0, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
 
 		tessellator.draw();
 		GL11.glTranslatef(0.5f, 0.5f, 0.5f);

@@ -23,22 +23,22 @@ public class RendererProcessor extends RendererGlobal
 		tessellator.startDrawingQuads();
 
 		tessellator.setNormal(0.0f, 1.0f, 0.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 0, renderer.getBlockIconFromSideAndMetadata(block, texture, -1));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 0, 0, renderer.getBlockIconFromSideAndMetadata(block, texture, -1));
 
 		tessellator.setNormal(0.0f, -1.0f, 0.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 1, renderer.getBlockIconFromSideAndMetadata(block, texture + 1, -1));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 1, 0, renderer.getBlockIconFromSideAndMetadata(block, texture + 1, -1));
 
 		tessellator.setNormal(-1.0f, 0.0f, 0.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 2, renderer.getBlockIconFromSideAndMetadata(block, texture + 2, -1));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 2, 0, renderer.getBlockIconFromSideAndMetadata(block, texture + 2, -1));
 
 		tessellator.setNormal(1.0f, 0.0f, 0.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 3, renderer.getBlockIconFromSideAndMetadata(block, texture + 3, -1));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 3, 0, renderer.getBlockIconFromSideAndMetadata(block, texture + 3, -1));
 
 		tessellator.setNormal(0.0f, 0.0f, -1.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 4, renderer.getBlockIconFromSideAndMetadata(block, texture + 4, -1));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 4, 0, renderer.getBlockIconFromSideAndMetadata(block, texture + 4, -1));
 
 		tessellator.setNormal(0.0f, 0.0f, 1.0f);
-		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 5, renderer.getBlockIconFromSideAndMetadata(block, texture + 5, -1));
+		renderFace(renderer, block, 0.0d, 0.0d, 0.0d, 5, 0, renderer.getBlockIconFromSideAndMetadata(block, texture + 5, -1));
 
 		tessellator.draw();
 		GL11.glTranslatef(0.5f, 0.5f, 0.5f);

@@ -6,7 +6,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
-import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityScriptStorage;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
@@ -34,7 +33,8 @@ public class BlockScriptStorage extends BlockBase
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z)
 	{
-		return super.canPlaceBlockAt(world, x, y, z) && Utils.hasProcessorAround(world, x, y, z);
+		return true;// super.canPlaceBlockAt(world, x, y, z) &&
+					// Utils.hasProcessorAround(world, x, y, z);
 	}
 
 	@Override
