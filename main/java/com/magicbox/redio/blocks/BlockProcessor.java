@@ -23,8 +23,8 @@ import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
-import com.magicbox.redio.script.objects.RedBoolObject;
 
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -116,6 +116,11 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{
+		TileEntity processor = world.getTileEntity(x, y, z);
+
+		if (processor instanceof EntityProcessor)
+			((EntityProcessor)processor).unregister();
+
 		super.onBlockExploded(world, x, y, z, explosion);
 
 		// @formatter:off
@@ -148,6 +153,11 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata)
 	{
+		TileEntity processor = world.getTileEntity(x, y, z);
+
+		if (processor instanceof EntityProcessor)
+			((EntityProcessor)processor).unregister();
+
 		// @formatter:off
 		TileEntity [] entities = new TileEntity[]
 		{
@@ -179,9 +189,18 @@ public class BlockProcessor extends BlockBase
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float fx, float fy, float fz)
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz)
 	{
-		Utils.broadcastProcessorPacket((EntityProcessor)world.getTileEntity(x, y, z), "IO-1", RedBoolObject.trueObject);
-		return false;
+		if (player.isSneaking())
+			return false;
+
+		if (!world.isRemote)
+			FMLNetworkHandler.openGui(player, Constants.MOD_ID, Constants.Processor.GUI_ID, world, x, y, z);
+
+		// @formatter:off
+		// Deliver messages to bus:
+		// Utils.broadcastProcessorPacket((EntityProcessor)world.getTileEntity(x, y, z), "IO-1", RedBoolObject.trueObject);
+		// @formatter:on
+		return true;
 	}
 }

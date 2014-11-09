@@ -21,6 +21,7 @@ public class RedIO
 	@EventHandler
 	public void load(FMLInitializationEvent event)
 	{
+		proxy.registerItems();
 		proxy.registerBlocks();
 		proxy.registerEntities();
 		proxy.registerRenderers();

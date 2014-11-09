@@ -1,10 +1,14 @@
 package com.magicbox.redio.entities;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.items.ItemScriptCard;
 import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
 import com.magicbox.redio.utils.InventoryUtils;
 
@@ -12,6 +16,24 @@ public class EntityScriptStorage extends EntityBase implements IInventory
 {
 	public ItemStack inventory;
 	public boolean inventoryChanged;
+
+	public ArrayList<Script> scripts = new ArrayList(Constants.ScriptStorage.MAX_STORAGE);
+
+	public void addScript(String name, String code)
+	{
+		scripts.add(new Script(name, code));
+		System.out.print(name + "|" + code);
+	}
+
+	public void overwriteScript(int index, String name, String code)
+	{
+		scripts.set(index, new Script(name, code));
+	}
+
+	public void insertScript(int index, String name, String code)
+	{
+		scripts.add(index, new Script(name, code));
+	}
 
 	@Override
 	public void updateClientEntity()
@@ -106,7 +128,6 @@ public class EntityScriptStorage extends EntityBase implements IInventory
 	@Override
 	public int getInventoryStackLimit()
 	{
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
@@ -135,7 +156,10 @@ public class EntityScriptStorage extends EntityBase implements IInventory
 	@Override
 	public boolean isItemValidForSlot(int var1, ItemStack var2)
 	{
-		return true;
+		if (var2.getItem() instanceof ItemScriptCard)
+			return true;
+		else
+			return false;
 	}
 
 	@Override

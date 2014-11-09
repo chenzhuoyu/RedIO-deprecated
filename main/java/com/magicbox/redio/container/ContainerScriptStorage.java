@@ -12,7 +12,7 @@ public class ContainerScriptStorage extends ContainerBase
 		super(inventory);
 		this.entity = entity;
 
-		Slot slot = new Slot(entity, 0, 10, 10);
+		Slot slot = new SlotScriptStorage(entity, 0, 13, 42);
 		addSlotToContainer(slot);
 	}
 }

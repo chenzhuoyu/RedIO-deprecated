@@ -74,6 +74,10 @@ public class Constants
 	public interface Processor
 	{
 		public static final String BLOCK_NAME = "processor";
+		
+		public static final int GUI_ID = 1;
+		public static final int GUI_X_SIZE = 176;
+		public static final int GUI_Y_SIZE = 166;
 	}
 
 	public interface ScriptStorage
@@ -82,10 +86,28 @@ public class Constants
 
 		public static final String SCRIPT_EXT = ".py";
 		public static final String SCRIPT_FOLDER = "scripts";
+		
+		public static final int MAX_STORAGE = 20;
 
 		public static final int GUI_ID = 0;
 		public static final int GUI_X_SIZE = 176;
 		public static final int GUI_Y_SIZE = 166;
+		
+		public static final int GUI_BUTTON_ADD_ID = 0;
+		public static final int GUI_BUTTON_DELETE_ID = 1;
+		public static final int GUI_BUTTON_UP_ID = 2;
+		public static final int GUI_BUTTON_DOWN_ID = 3;
+	}
+	
+	public interface ScriptCard
+	{
+		public static final String ITEM_NAME = "scriptCard";
+	}
+	
+	public interface Gui
+	{
+		public static final int OFFSET_X = 125;
+		public static final int OFFSET_Y = 37;
 	}
 
 	public static String getTextureName(String blockName)
