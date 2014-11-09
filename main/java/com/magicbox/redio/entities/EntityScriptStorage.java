@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.items.ItemScriptCard;
+import com.magicbox.redio.items.Script;
 import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
 import com.magicbox.redio.utils.InventoryUtils;
 

@@ -4,7 +4,6 @@ import net.minecraft.item.Item;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Instances;
-import com.magicbox.redio.entities.Script;
 
 public class ItemScriptCard extends Item
 {

@@ -1,4 +1,4 @@
-package com.magicbox.redio.entities;
+package com.magicbox.redio.items;
 
 public class Script
 {
