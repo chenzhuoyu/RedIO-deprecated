@@ -44,7 +44,7 @@ public class GuiHandler implements IGuiHandler
 			break;
 			case Constants.Processor.GUI_ID:
 				if (te instanceof EntityProcessor)
-					return new GuiProcessor((EntityProcessor) te);
+					return new GuiProcessor(player.inventory, (EntityProcessor) te);
 		}
 		return null;
 	}
