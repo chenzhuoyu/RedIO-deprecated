@@ -1,12 +1,12 @@
 package com.magicbox.redio.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
-import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityIO;
 
 public class BlockIO extends BlockBase
@@ -30,33 +30,39 @@ public class BlockIO extends BlockBase
 	}
 
 	@Override
+	public boolean canProvidePower()
+	{
+		return true;
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World world, int metadata)
 	{
-		EntityIO entity = new EntityIO();
-
-		entity.setName(Utils.getRouterName("IO-"));
-		return entity;
+		return new EntityIO();
 	}
 
 	@Override
-	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
+	public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
 	{
-		TileEntity processor = world.getTileEntity(x, y, z);
+		TileEntity entity = world.getTileEntity(x, y, z);
 
-		if (processor instanceof EntityIO)
-			((EntityIO)processor).unregister();
+		if (entity instanceof EntityIO)
+			((EntityIO)entity).unregister();
 
-		super.onBlockExploded(world, x, y, z, explosion);
+		super.breakBlock(world, x, y, z, block, metadata);
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata)
+	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int metadata)
 	{
-		TileEntity processor = world.getTileEntity(x, y, z);
+		TileEntity entity = world.getTileEntity(x, y, z);
+		return entity instanceof EntityIO && ((EntityIO)entity).getOutputing() ? 15 : 0;
+	}
 
-		if (processor instanceof EntityIO)
-			((EntityIO)processor).unregister();
-
-		super.onBlockDestroyedByPlayer(world, x, y, z, metadata);
+	@Override
+	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int metadata)
+	{
+		TileEntity entity = world.getTileEntity(x, y, z);
+		return entity instanceof EntityIO && ((EntityIO)entity).getOutputing() ? 15 : 0;
 	}
 }

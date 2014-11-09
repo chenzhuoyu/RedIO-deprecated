@@ -20,6 +20,7 @@ public class PacketEntityProcessorUpdate extends PacketEntityUpdateBase
 	public PacketEntityProcessorUpdate(EntityProcessor entity)
 	{
 		super(Constants.Packets.packetProcessor, entity);
+		name = entity.getName();
 		isDamaged = entity.getDamaged();
 		isPowered = entity.getPowered();
 		heatValue = entity.getHeatValue();

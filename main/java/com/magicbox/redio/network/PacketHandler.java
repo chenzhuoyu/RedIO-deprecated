@@ -24,6 +24,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<IPacketProtocol>
 		{
 			switch (packetProtocol.getPacketId())
 			{
+				case Constants.Packets.packetIO:
 				case Constants.Packets.packetBusCable:
 				case Constants.Packets.packetProcessor:
 				case Constants.Packets.packetScriptStorage:

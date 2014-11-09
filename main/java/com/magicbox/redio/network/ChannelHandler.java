@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.network.packets.IPacketProtocol;
 import com.magicbox.redio.network.packets.PacketEntityBusCableUpdate;
+import com.magicbox.redio.network.packets.PacketEntityIOUpdate;
 import com.magicbox.redio.network.packets.PacketEntityProcessorUpdate;
 import com.magicbox.redio.network.packets.PacketEntityScriptStorageUpdate;
 
@@ -15,6 +16,7 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<IPacketProto
 {
 	public ChannelHandler()
 	{
+		addDiscriminator(Constants.Packets.packetIO, PacketEntityIOUpdate.class);
 		addDiscriminator(Constants.Packets.packetBusCable, PacketEntityBusCableUpdate.class);
 		addDiscriminator(Constants.Packets.packetProcessor, PacketEntityProcessorUpdate.class);
 		addDiscriminator(Constants.Packets.packetScriptStorage, PacketEntityScriptStorageUpdate.class);

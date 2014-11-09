@@ -3,9 +3,11 @@ package com.magicbox.redio.blocks;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -21,6 +23,7 @@ import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
+import com.magicbox.redio.script.objects.RedBoolObject;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -89,10 +92,7 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public EntityBase createNewTileEntity(World world, int meta)
 	{
-		EntityProcessor entity = new EntityProcessor();
-
-		entity.setName(Utils.getRouterName("Processor-"));
-		return entity;
+		return new EntityProcessor();
 	}
 
 	@Override
@@ -103,13 +103,19 @@ public class BlockProcessor extends BlockBase
 	}
 
 	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
+	{
+		TileEntity entity = world.getTileEntity(x, y, z);
+
+		if (entity instanceof EntityProcessor)
+			((EntityProcessor)entity).unregister();
+
+		super.breakBlock(world, x, y, z, block, metadata);
+	}
+
+	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{
-		TileEntity processor = world.getTileEntity(x, y, z);
-
-		if (processor instanceof EntityProcessor)
-			((EntityProcessor)processor).unregister();
-
 		super.onBlockExploded(world, x, y, z, explosion);
 
 		// @formatter:off
@@ -142,11 +148,6 @@ public class BlockProcessor extends BlockBase
 	@Override
 	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata)
 	{
-		TileEntity processor = world.getTileEntity(x, y, z);
-
-		if (processor instanceof EntityProcessor)
-			((EntityProcessor)processor).unregister();
-
 		// @formatter:off
 		TileEntity [] entities = new TileEntity[]
 		{
@@ -175,5 +176,12 @@ public class BlockProcessor extends BlockBase
 		int damage = damageDropped(metadata);
 		ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1, damage);
 		dropBlockAsItem(world, x, y, z, stack.setStackDisplayName(damage == 0x00 ? "Processor" : "Processor (damaged)"));
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float fx, float fy, float fz)
+	{
+		Utils.broadcastProcessorPacket((EntityProcessor)world.getTileEntity(x, y, z), "IO-1", RedBoolObject.trueObject);
+		return false;
 	}
 }

@@ -24,9 +24,10 @@ public class Constants
 
 	public interface Packets
 	{
-		public static final int packetBusCable = 0;
-		public static final int packetProcessor = 1;
-		public static final int packetScriptStorage = 2;
+		public static final int packetIO = 0;
+		public static final int packetBusCable = 1;
+		public static final int packetProcessor = 2;
+		public static final int packetScriptStorage = 3;
 	}
 
 	public interface Recipes

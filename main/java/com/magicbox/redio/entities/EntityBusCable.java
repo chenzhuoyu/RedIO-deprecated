@@ -32,11 +32,6 @@ public class EntityBusCable extends EntityBase implements IPacketRouterNode
 		connectivity &= ~(1 << side.ordinal());
 	}
 
-	private boolean isEntityConnactable(TileEntity entity)
-	{
-		return entity instanceof EntityBusCable || entity instanceof EntityProcessor;
-	}
-
 	public boolean isCableConnected()
 	{
 		return connectivity != 0;
@@ -62,22 +57,22 @@ public class EntityBusCable extends EntityBase implements IPacketRouterNode
 		TileEntity zNeg = worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
 		TileEntity zPos = worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
 
-		if (isEntityConnactable(xNeg))
+		if (xNeg instanceof IPacketRouterNode)
 			connectCable(Constants.BusCable.Direction.XNegative);
 		else
 			disconnectCable(Constants.BusCable.Direction.XNegative);
 
-		if (isEntityConnactable(xPos))
+		if (xPos instanceof IPacketRouterNode)
 			connectCable(Constants.BusCable.Direction.XPositive);
 		else
 			disconnectCable(Constants.BusCable.Direction.XPositive);
 
-		if (isEntityConnactable(zNeg))
+		if (zNeg instanceof IPacketRouterNode)
 			connectCable(Constants.BusCable.Direction.ZNegative);
 		else
 			disconnectCable(Constants.BusCable.Direction.ZNegative);
 
-		if (isEntityConnactable(zPos))
+		if (zPos instanceof IPacketRouterNode)
 			connectCable(Constants.BusCable.Direction.ZPositive);
 		else
 			disconnectCable(Constants.BusCable.Direction.ZPositive);

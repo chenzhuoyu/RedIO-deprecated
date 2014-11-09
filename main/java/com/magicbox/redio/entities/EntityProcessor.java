@@ -29,7 +29,7 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 {
 	private static final HashMap<String, BytecodeBuffer> compiledBytecodes = new HashMap<String, BytecodeBuffer>();
 
-	private String name = "";
+	private String name = Utils.getRouterName("Processor-");
 	private double heatValue = 0.0d;
 	private boolean isDamaged = false;
 	private boolean isPowered = false;
@@ -63,30 +63,38 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 
 	public void setName(String name)
 	{
-		unregister();
-		this.name = name;
-		Utils.registerRouter(name, this);
+		if (!this.name.equals(name))
+		{
+			unregister();
+			this.name = name;
+			Utils.registerRouter(name, this);
+		}
 	}
 
 	public void setDamaged(boolean isDamaged)
 	{
-		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord) & 0x03;
+		if (this.isDamaged != isDamaged)
+		{
+			this.isDamaged = isDamaged;
 
-		this.isDamaged = isDamaged;
-		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata | (isDamaged ? 0x04 : 0x00), 3);
+			if (worldObj != null)
+			{
+				int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord) & 0x03;
+				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata | (isDamaged ? 0x04 : 0x00), 3);
+			}
+		}
 	}
 
 	public void setPowered(boolean isPowered)
 	{
-		this.isPowered = isPowered;
+		if (this.isPowered != isPowered)
+			this.isPowered = isPowered;
 	}
 
 	public void setHeatValue(double heatValue)
 	{
-		this.heatValue = heatValue;
-
-		if (this.heatValue < 0.0d)
-			this.heatValue = 0.0d;
+		if (this.heatValue != heatValue)
+			this.heatValue = Math.max(heatValue, 0.0d);
 	}
 
 	public void unregister()
@@ -160,9 +168,9 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		name = nbt.getString("name");
-		heatValue = nbt.getDouble("heatValue");
-		isDamaged = nbt.getBoolean("isDamaged");
+		setName(nbt.getString("name"));
+		setDamaged(nbt.getBoolean("isDamaged"));
+		setHeatValue(nbt.getDouble("heatValue"));
 	}
 
 	@Override
@@ -191,7 +199,7 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 		if (heatValue >= 80.0d)
 			setDamaged(true);
 
-		if (heatValue < 100.0d)
+		if (heatValue <= 100.0d)
 			Network.broadcastToClients(new PacketEntityProcessorUpdate(this));
 		else
 			worldObj.createExplosion(null, xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d, 2.0f, true);

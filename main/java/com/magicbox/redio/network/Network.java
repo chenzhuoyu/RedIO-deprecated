@@ -17,18 +17,6 @@ public class Network
 		new ChannelHandler(),
 		new PacketHandler());
 
-	public static void sendToServer(IPacketProtocol packetProtocol)
-	{
-		try
-		{
-			channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-			channels.get(Side.CLIENT).writeOutbound(packetProtocol);
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
 	public static void broadcastToClients(IPacketProtocol packetProtocol)
 	{
 		try

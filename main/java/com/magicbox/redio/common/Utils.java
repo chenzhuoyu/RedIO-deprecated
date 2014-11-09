@@ -13,11 +13,23 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.magicbox.redio.emulator.IPacketRouterNode;
+import com.magicbox.redio.entities.EntityBusCable;
 import com.magicbox.redio.entities.EntityProcessor;
+import com.magicbox.redio.script.objects.RedNullObject;
+import com.magicbox.redio.script.objects.RedObject;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class Utils
 {
-	private static HashMap<String, IPacketRouterNode> mappedNodes = new HashMap<String, IPacketRouterNode>();
+	private static HashMap<Side, HashMap<String, IPacketRouterNode>> mappedNodes = new HashMap<Side, HashMap<String, IPacketRouterNode>>();
+
+	static
+	{
+		mappedNodes.put(Side.CLIENT, new HashMap<String, IPacketRouterNode>());
+		mappedNodes.put(Side.SERVER, new HashMap<String, IPacketRouterNode>());
+	}
 
 	public static int getPlayerFacing(EntityLivingBase player)
 	{
@@ -26,14 +38,14 @@ public class Utils
 
 	public static void registerRouter(String name, IPacketRouterNode node)
 	{
-		mappedNodes.put(name, node);
+		mappedNodes.get(FMLCommonHandler.instance().getEffectiveSide()).put(name, node);
 	}
 
 	public static void unregisterRouter(String name, IPacketRouterNode node)
 	{
-		if (mappedNodes.containsKey(name))
-			if (mappedNodes.get(name) == node)
-				mappedNodes.remove(name);
+		if (mappedNodes.get(FMLCommonHandler.instance().getEffectiveSide()).containsKey(name))
+			if (mappedNodes.get(FMLCommonHandler.instance().getEffectiveSide()).get(name) == node)
+				mappedNodes.get(FMLCommonHandler.instance().getEffectiveSide()).remove(name);
 	}
 
 	public static void addCraftingRecipe(Block result, int count, Object... recipes)
@@ -86,7 +98,7 @@ public class Utils
 	{
 		int i = 1;
 
-		while (mappedNodes.containsKey(prefix + i))
+		while (mappedNodes.get(FMLCommonHandler.instance().getEffectiveSide()).containsKey(prefix + i))
 			i++;
 
 		return prefix + i;
@@ -99,7 +111,7 @@ public class Utils
 
 	public static boolean isRouterNameValid(String name)
 	{
-		return !mappedNodes.containsKey(name);
+		return !mappedNodes.get(FMLCommonHandler.instance().getEffectiveSide()).containsKey(name);
 	}
 
 	public static boolean hasProcessorAround(World world, int x, int y, int z)
@@ -120,5 +132,18 @@ public class Utils
 				return true;
 
 		return false;
+	}
+
+	public static RedObject broadcastProcessorPacket(EntityProcessor processor, String destination, RedObject packet)
+	{
+		for (EntityBusCable cable : processor.getConnectedCables())
+		{
+			RedObject result = cable.dispatchPacket(processor, processor, destination, packet);
+
+			if (result != null && !result.isNull())
+				return result;
+		}
+
+		return RedNullObject.nullObject;
 	}
 }
