@@ -11,6 +11,7 @@ import com.magicbox.redio.entities.EntityBusCable;
 import com.magicbox.redio.entities.EntityIO;
 import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
+import com.magicbox.redio.items.ItemScriptCard;
 import com.magicbox.redio.renderers.RendererBusCable;
 import com.magicbox.redio.renderers.RendererGlobal;
 import com.magicbox.redio.renderers.RendererProcessor;
@@ -18,6 +19,11 @@ import com.magicbox.redio.renderers.RendererProcessor;
 public class Instances
 {
 	public static final CreativeTab creativeTab = new CreativeTab();
+
+	public interface Items
+	{
+		public static final ItemScriptCard itemScriptCard = new ItemScriptCard();
+	}
 
 	public interface Blocks
 	{

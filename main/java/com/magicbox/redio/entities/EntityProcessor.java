@@ -109,7 +109,8 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 			try
 			{
 				interpreter.setBytecodes(Compiler.compile(filename, script));
-			} catch (ScriptException e)
+			}
+			catch (ScriptException e)
 			{
 				e.printStackTrace();
 				return false;
@@ -133,16 +134,16 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 		TileEntity zPos = worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
 
 		if (xNeg instanceof EntityBusCable)
-			result.add((EntityBusCable)xNeg);
+			result.add((EntityBusCable) xNeg);
 
 		if (xPos instanceof EntityBusCable)
-			result.add((EntityBusCable)xPos);
+			result.add((EntityBusCable) xPos);
 
 		if (zNeg instanceof EntityBusCable)
-			result.add((EntityBusCable)zNeg);
+			result.add((EntityBusCable) zNeg);
 
 		if (zPos instanceof EntityBusCable)
-			result.add((EntityBusCable)zPos);
+			result.add((EntityBusCable) zPos);
 
 		return result;
 	}
@@ -206,7 +207,8 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 					try
 					{
 						onSystemTick.invoke();
-					} catch (RuntimeException e)
+					}
+					catch (RuntimeException e)
 					{
 						onSystemTick = null;
 						e.printStackTrace();
@@ -219,7 +221,7 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 	@Override
 	public void handleUpdatePacket(PacketEntityUpdateBase packet)
 	{
-		PacketEntityProcessorUpdate updates = (PacketEntityProcessorUpdate)packet;
+		PacketEntityProcessorUpdate updates = (PacketEntityProcessorUpdate) packet;
 
 		setName(updates.getName());
 		setDamaged(updates.getDamaged());
@@ -243,7 +245,8 @@ public class EntityProcessor extends EntityBase implements IPacketRouterNode
 		try
 		{
 			return onPacketReceived.invoke(packet);
-		} catch (RuntimeException e)
+		}
+		catch (RuntimeException e)
 		{
 			e.printStackTrace();
 			onPacketReceived = null;

@@ -5,7 +5,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
+import com.magicbox.redio.container.ContainerProcessor;
 import com.magicbox.redio.container.ContainerScriptStorage;
+import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
 
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -22,6 +24,10 @@ public class GuiHandler implements IGuiHandler
 				if (te instanceof EntityScriptStorage)
 					return new ContainerScriptStorage(player.inventory, (EntityScriptStorage) te);
 			break;
+			case Constants.Processor.GUI_ID:
+				if (te instanceof EntityProcessor)
+					return new ContainerProcessor(player.inventory, (EntityProcessor) te);
+			break;
 		}
 		return null;
 	}
@@ -36,6 +42,9 @@ public class GuiHandler implements IGuiHandler
 				if (te instanceof EntityScriptStorage)
 					return new GuiScriptStorage(player.inventory, (EntityScriptStorage) te);
 			break;
+			case Constants.Processor.GUI_ID:
+				if (te instanceof EntityProcessor)
+					return new GuiProcessor((EntityProcessor) te);
 		}
 		return null;
 	}

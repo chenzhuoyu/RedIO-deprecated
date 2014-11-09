@@ -3,6 +3,7 @@ package com.magicbox.redio.proxies;
 import java.lang.reflect.Field;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Instances;
@@ -64,6 +65,22 @@ public class CommonProxy
 			{
 				Object[] recipe = (Object[]) field.get(field.getClass());
 				Utils.addCraftingRecipe((Block) recipe[0], (Integer) recipe[1], (Object[]) recipe[2]);
+			}
+			catch (IllegalAccessException | IllegalArgumentException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void registerItems()
+	{
+		for (Field field : Instances.Items.class.getFields())
+		{
+			try
+			{
+				Item item = (Item) field.get(field.getClass());
+				GameRegistry.registerItem(item, item.getUnlocalizedName());
 			}
 			catch (IllegalAccessException | IllegalArgumentException e)
 			{

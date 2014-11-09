@@ -6,6 +6,7 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -22,6 +23,7 @@ import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
 
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -75,15 +77,15 @@ public class BlockProcessor extends BlockBase
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
 	{
 		TileEntity entity = world.getTileEntity(x, y, z);
-		return entity instanceof EntityProcessor ? ((EntityProcessor)entity).getPowered() : false;
+		return entity instanceof EntityProcessor ? ((EntityProcessor) entity).getPowered() : false;
 	}
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
 		int damageValue = getDamageValue(world, x, y, z);
-		return new ItemStack(Item.getItemFromBlock(this), 1, damageValue)
-			.setStackDisplayName((damageValue & 0x04) == 0 ? "Processor" : "Processor (damaged)");
+		return new ItemStack(Item.getItemFromBlock(this), 1, damageValue).setStackDisplayName((damageValue & 0x04) == 0 ? "Processor"
+				: "Processor (damaged)");
 	}
 
 	@Override
@@ -108,7 +110,7 @@ public class BlockProcessor extends BlockBase
 		TileEntity processor = world.getTileEntity(x, y, z);
 
 		if (processor instanceof EntityProcessor)
-			((EntityProcessor)processor).unregister();
+			((EntityProcessor) processor).unregister();
 
 		super.onBlockExploded(world, x, y, z, explosion);
 
@@ -136,7 +138,7 @@ public class BlockProcessor extends BlockBase
 		int facing = Utils.getPlayerFacing(entity);
 
 		world.setBlockMetadataWithNotify(x, y, z, facing | damage, 1);
-		((EntityProcessor)world.getTileEntity(x, y, z)).setDamaged((damage & 0x4) == 0x04);
+		((EntityProcessor) world.getTileEntity(x, y, z)).setDamaged((damage & 0x4) == 0x04);
 	}
 
 	@Override
@@ -145,7 +147,7 @@ public class BlockProcessor extends BlockBase
 		TileEntity processor = world.getTileEntity(x, y, z);
 
 		if (processor instanceof EntityProcessor)
-			((EntityProcessor)processor).unregister();
+			((EntityProcessor) processor).unregister();
 
 		// @formatter:off
 		TileEntity [] entities = new TileEntity[]
@@ -162,7 +164,7 @@ public class BlockProcessor extends BlockBase
 		{
 			if (entity instanceof EntityScriptStorage)
 			{
-				BlockScriptStorage block = (BlockScriptStorage)((EntityScriptStorage)entity).getBlockType();
+				BlockScriptStorage block = (BlockScriptStorage) ((EntityScriptStorage) entity).getBlockType();
 
 				if (!Utils.hasProcessorAround(world, entity.xCoord, entity.yCoord, entity.zCoord))
 				{
@@ -175,5 +177,17 @@ public class BlockProcessor extends BlockBase
 		int damage = damageDropped(metadata);
 		ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1, damage);
 		dropBlockAsItem(world, x, y, z, stack.setStackDisplayName(damage == 0x00 ? "Processor" : "Processor (damaged)"));
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz)
+	{
+		if (player.isSneaking())
+			return false;
+
+		if (!world.isRemote)
+			FMLNetworkHandler.openGui(player, Constants.MOD_ID, Constants.Processor.GUI_ID, world, x, y, z);
+
+		return true;
 	}
 }
