@@ -1,4 +1,4 @@
-package com.magicbox.redio.common;
+package com.magicbox.redio.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

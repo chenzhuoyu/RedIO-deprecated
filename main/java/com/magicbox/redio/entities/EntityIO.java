@@ -2,7 +2,6 @@ package com.magicbox.redio.entities;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.emulator.IPacketRouterNode;
 import com.magicbox.redio.network.Network;
 import com.magicbox.redio.network.packets.PacketEntityIOUpdate;
@@ -10,6 +9,7 @@ import com.magicbox.redio.network.packets.PacketEntityUpdateBase;
 import com.magicbox.redio.script.objects.RedBoolObject;
 import com.magicbox.redio.script.objects.RedNullObject;
 import com.magicbox.redio.script.objects.RedObject;
+import com.magicbox.redio.utils.Utils;
 
 public class EntityIO extends EntityBase implements IPacketRouterNode
 {

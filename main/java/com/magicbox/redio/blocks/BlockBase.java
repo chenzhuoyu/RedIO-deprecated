@@ -15,9 +15,9 @@ import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Instances;
-import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.utils.TextureLoader;
+import com.magicbox.redio.utils.Utils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

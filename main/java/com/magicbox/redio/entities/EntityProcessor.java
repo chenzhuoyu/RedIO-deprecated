@@ -12,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 import com.magicbox.redio.common.Constants;
-import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.emulator.IPacketRouterNode;
 import com.magicbox.redio.emulator.RedScriptBridge;
 import com.magicbox.redio.network.Network;
@@ -24,6 +23,7 @@ import com.magicbox.redio.script.engine.Interpreter;
 import com.magicbox.redio.script.objects.RedNullObject;
 import com.magicbox.redio.script.objects.RedObject;
 import com.magicbox.redio.script.objects.console.RedConsoleObject;
+import com.magicbox.redio.utils.Utils;
 
 public class EntityProcessor extends EntityBase implements IPacketRouterNode
 {

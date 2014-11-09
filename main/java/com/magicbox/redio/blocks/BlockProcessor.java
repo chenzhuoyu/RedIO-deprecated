@@ -19,10 +19,10 @@ import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
 import com.magicbox.redio.common.Instances;
-import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityBase;
 import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.entities.EntityScriptStorage;
+import com.magicbox.redio.utils.Utils;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;

@@ -1,10 +1,10 @@
 package com.magicbox.redio.emulator;
 
-import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityProcessor;
 import com.magicbox.redio.script.objects.RedObject;
 import com.magicbox.redio.script.objects.array.RedArrayObject;
 import com.magicbox.redio.script.objects.string.RedStringObject;
+import com.magicbox.redio.utils.Utils;
 
 public class RedScriptBridgeSendMessageMethod extends RedScriptBridgeBaseMethod
 {

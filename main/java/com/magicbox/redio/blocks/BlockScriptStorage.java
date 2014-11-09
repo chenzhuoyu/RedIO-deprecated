@@ -6,8 +6,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.magicbox.redio.common.Constants;
-import com.magicbox.redio.common.Utils;
 import com.magicbox.redio.entities.EntityScriptStorage;
+import com.magicbox.redio.utils.Utils;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 
